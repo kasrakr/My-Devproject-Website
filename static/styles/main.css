@@ -1,0 +1,12 @@
+h1 {
+  color: red;
+}
+
+p {
+  color: rgb(50, 169, 3);
+}
+
+#logo {
+  width: 100px;
+  height: auto;
+}

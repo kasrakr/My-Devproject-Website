@@ -1,0 +1,21 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devsearch</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href='{% static "styles/main.css" %}'
+    />
+    <!--  linking to css file with django! -->
+    <script src="main.js"></script>
+  </head>
+  <body>
+    {%include 'navbar.html'%} {% block content %} {% endblock content %}
+    <p>footer of the page</p>
+  </body>
+</html>

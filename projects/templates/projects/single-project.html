@@ -1,0 +1,12 @@
+{% extends 'main.html'%} {% block content %}
+<img
+  style="max-width: 500px; height: auto"
+  src="{{projectlist.featured_image.url}}"
+/>
+<h1>{{projectlist.title}}</h1>
+<p>{{projectlist.description}}</p>
+<!-- we have to add .url at the end of variable because we need the url of uploaded image -->
+<h1>Tags:</h1>
+{% for i in tags %}
+<span style="border: 1px solid orange">{{i}}</span>
+{% endfor %} {% endblock content%}
