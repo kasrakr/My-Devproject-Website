@@ -1,0 +1,27 @@
+{% extends 'main.html'%} {% block content %}
+<p>Welcome to the {{page}} page!</p>
+<h1>Projects are here</h1>
+<hr />
+<table>
+  <tr>
+    <th>Project</th>
+    <th>Vote Ratio</th>
+    <th>Votes</th>
+    <th>Date Created</th>
+  </tr>
+  {% for i in projectlist %}
+  <tr>
+    <td>{{i.title}}</td>
+    <td>{{i.vote_ratio}}%</td>
+    <td>{{i.vote_total}}</td>
+    <td>{{i.created}}</td>
+    <td><a href="{% url 'project' i.id %}">View</a></td>
+    <td><a href="{% url 'update-project' i.id %}">Edit</a></td>
+    <td><a href="{% url 'delete-project' i.id %}">Delete</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock content %}
+<!-- {%include 'navbar.html'%} -->
+<!-- show content of navbar.html -->
