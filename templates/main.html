@@ -2,15 +2,34 @@
 {% load static %}
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+ <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Devsearch</title>
+    <title>{% block title %}Devsearch{% endblock title %}</title>
+    <meta
+      name="description"
+      content="{% block description %}Devsearch is a Django-based platform for managing and showcasing programming projects.{% endblock description %}"
+    />
+    <meta name="theme-color" content="#3B82F6" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
     <link
       rel="stylesheet"
       type="text/css"
       media="screen"
       href='{% static "styles/main.css" %}'
     />
+    <!--  linking to css file with django! -->
+    {# Was "main.js" without the static tag before — fixed to resolve #}
+    {# correctly, and "defer" so it can safely stay in <head>. #}
+    <script src='{% static "scripts/main.js" %}' defer></script>
+
+    {% block extra_head %}{% endblock extra_head %}
     <!--  linking to css file with django! -->
     <script src="main.js"></script>
   </head>
