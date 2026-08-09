@@ -832,3 +832,233 @@ textarea:focus-visible {
   .section { padding: calc(var(--space-section) * 0.72) 0; }
   .section__head { margin-bottom: 2.25rem; }
 }
+
+/* ==========================================================================
+   19. PAGE HEAD (interior pages: create-project, view-project, etc.)
+   ========================================================================== */
+.page-head {
+  position: relative;
+  overflow: hidden;
+  padding: 3.5rem 0 3rem;
+  background:
+    radial-gradient(55% 60% at 90% 0%, rgba(59,130,246,0.10) 0%, rgba(59,130,246,0) 70%),
+    var(--color-bg-tint);
+  border-bottom: 1px solid var(--color-line);
+}
+.page-head__title {
+  font-size: clamp(1.9rem, 1.5rem + 2vw, 2.75rem);
+  margin-top: 0.75rem;
+  max-width: 44ch;
+}
+.page-head__subtitle {
+  margin-top: 0.75rem;
+  font-size: 1.02rem;
+  max-width: 55ch;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary-600);
+  margin-bottom: 1.25rem;
+  transition: gap 0.2s var(--ease);
+}
+.back-link svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.back-link:hover { gap: 0.65rem; }
+
+/* ==========================================================================
+   20. PROJECT FORM (create / edit)
+   ========================================================================== */
+.form-page {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+.project-form { padding: 2rem; }
+.project-form__actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+.field__required { color: #EF4444; margin-left: 0.15rem; }
+.field-help { font-size: 0.78rem; color: var(--color-muted); margin-top: 0.4rem; }
+.form-error-banner {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #B91C1C;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.25rem;
+  font-size: 0.88rem;
+}
+.form-error-banner p { margin: 0; color: inherit; }
+.form-error-banner p + p { margin-top: 0.3rem; }
+
+/* Extend the base field styling to selects and checkboxes */
+.field select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.field select:focus { border-color: var(--color-primary); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14); outline: none; }
+.field select[multiple] { min-height: 130px; }
+
+.field--checkbox .field__checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+.field--checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary-600);
+  cursor: pointer;
+}
+
+/* Form tips sidebar */
+.form-tips { padding: 1.75rem 1.6rem; }
+.form-tips h3 { font-size: 1.02rem; margin-bottom: 1rem; }
+.form-tips__list { display: flex; flex-direction: column; gap: 0.85rem; }
+.form-tips__list li {
+  position: relative;
+  padding-left: 1.4rem;
+  font-size: 0.88rem;
+  color: var(--color-muted);
+  line-height: 1.55;
+}
+.form-tips__list li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.5em;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+@media (max-width: 900px) { .form-page { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   21. FILE UPLOAD / DROPZONE
+   ========================================================================== */
+.file-drop {
+  position: relative;
+  border: 1.5px dashed rgba(59, 130, 246, 0.35);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.4);
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.file-drop:hover,
+.file-drop.is-dragover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-50);
+}
+.file-drop input[type="file"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.file-drop__hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+.file-drop__hint svg { width: 26px; height: 26px; stroke: var(--color-primary-600); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.file-drop__preview {
+  margin: 1rem auto 0;
+  max-height: 160px;
+  border-radius: var(--radius-sm);
+  display: block;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   22. PROJECT DETAIL (view-project)
+   ========================================================================== */
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+.detail-media { padding: 0.9rem; overflow: hidden; }
+.detail-media img { width: 100%; height: auto; border-radius: calc(var(--radius-lg) - 8px); display: block; }
+.detail-body { margin-top: 2rem; }
+.detail-body h2 { font-size: 1.2rem; margin-bottom: 0.75rem; }
+.detail-body p { font-size: 1rem; line-height: 1.75; }
+
+.detail-info { padding: 1.75rem 1.6rem; }
+.detail-info h3 { font-size: 1.02rem; margin-bottom: 1.25rem; }
+.detail-info__row {
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--color-line);
+}
+.detail-info__row:first-of-type { border-top: none; padding-top: 0; }
+.detail-info__label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  margin-bottom: 0.5rem;
+}
+.detail-info__value { font-weight: 600; font-size: 0.95rem; color: var(--color-ink); }
+
+.tag-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.tag-pill {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-primary-700);
+  background: var(--color-primary-50);
+  border: 1px solid var(--color-primary-100);
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-full);
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+}
+a.tag-pill:hover {
+  background: var(--color-primary-100);
+  transform: translateY(-1px);
+}
+
+.detail-info__links { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
+.detail-info__manage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-line);
+}
+.detail-info__manage form { margin: 0; }
+
+@media (max-width: 900px) {
+  .detail-layout { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   23. DANGER BUTTON VARIANT
+   ========================================================================== */
+.btn--danger {
+  background: linear-gradient(135deg, #EF4444, #B91C1C);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(239, 68, 68, 0.28);
+}
+.btn--danger:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(239, 68, 68, 0.36); }

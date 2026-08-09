@@ -1,12 +1,184 @@
-{% extends 'main.html'%} {% block content %}
-<img
-  style="max-width: 500px; height: auto"
-  src="{{projectlist.featured_image.url}}"
-/>
-<h1>{{projectlist.title}}</h1>
-<p>{{projectlist.description}}</p>
-<!-- we have to add .url at the end of variable because we need the url of uploaded image -->
-<h1>Tags:</h1>
-{% for i in tags %}
-<span style="border: 1px solid orange">{{i}}</span>
-{% endfor %} {% endblock content%}
+{% extends 'main.html' %} {% block title %}{{ projectlist.title }} ·
+DevProject{% endblock title %} {% block description %}{{
+projectlist.description|truncatewords:25 }}{% endblock description %} {% block
+content %}
+
+<!--
+  Matches your existing view:
+    projectlist -> a single Project instance (kept as "projectlist" since
+                   that's the name your view already passes in context)
+    tags        -> the project's tags, passed separately in context
+                   (e.g. tags = projectlist.tags.all() in your view),
+                   same as your original template.
+
+  Rendered defensively, so nothing breaks if a field is blank or your
+  model doesn't have it: featured_image, demo_link, created_at, owner.
+
+  Optional bonus, only renders if you pass it in:
+    related_projects -> other Project objects for the "More to explore" grid
+
+  Assumed URL names (rename to match your urls.py):
+    'projects'        -> project listing page
+    'view-project'    -> this same detail page, takes a project id
+    'update-project'  -> edit view (create-project.html doubles as this)
+    'delete-project'  -> POST endpoint that deletes the project
+-->
+
+<section class="page-head">
+  <div
+    class="blob"
+    style="
+      width: 360px;
+      height: 360px;
+      top: -140px;
+      right: -100px;
+      background: radial-gradient(
+        circle,
+        rgba(59, 130, 246, 0.14),
+        transparent 70%
+      );
+    "
+  ></div>
+  <div class="section-inner" style="position: relative; z-index: 1">
+    <a href="{% url 'projects' %}" class="back-link">
+      <svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6" /></svg>
+      Back to projects
+    </a>
+    <p class="eyebrow reveal">Project</p>
+    <h1 class="page-head__title reveal">{{ projectlist.title }}</h1>
+    <p class="page-head__subtitle reveal">
+      {% if projectlist.created_at %}Added {{ projectlist.created_at|date:"F j,
+      Y" }}{% endif %}{% if projectlist.owner %} by {{ projectlist.owner }}{%
+      endif %}
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner detail-layout">
+    <div class="detail-main">
+      <div class="detail-media glass reveal">
+        {% if projectlist.featured_image %}
+        <img
+          src="{{ projectlist.featured_image.url }}"
+          alt="{{ projectlist.title }} preview"
+        />
+        {% else %}
+        <img
+          src="https://placehold.co/960x540/3B82F6/ffffff?text={{ projectlist.title|urlencode }}"
+          alt="Placeholder preview for {{ projectlist.title }}"
+        />
+        {% endif %}
+      </div>
+
+      <div class="detail-body reveal reveal-delay-1">
+        <h2>About this project</h2>
+        <p>{{ projectlist.description|linebreaksbr }}</p>
+      </div>
+    </div>
+
+    <aside class="detail-info glass reveal reveal-delay-2">
+      <h3>Details</h3>
+
+      {% if tags %}
+      <div class="detail-info__row">
+        <span class="detail-info__label">Tags</span>
+        <div class="tag-pills">
+          {% for tag in tags %}
+          <a href="{% url 'projects' %}?tag={{ tag }}" class="tag-pill"
+            >{{ tag }}</a
+          >
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %} {% if projectlist.created_at %}
+      <div class="detail-info__row">
+        <span class="detail-info__label">Created</span>
+        <span class="detail-info__value"
+          >{{ projectlist.created_at|date:"M j, Y" }}</span
+        >
+      </div>
+      {% endif %}
+
+      <div class="detail-info__links">
+        {% if projectlist.source_link %}
+        <a
+          href="{{ projectlist.source_link }}"
+          class="btn btn--primary btn--block"
+          target="_blank"
+          rel="noopener"
+          >View Source</a
+        >
+        {% endif %} {% if projectlist.demo_link %}
+        <a
+          href="{{ projectlist.demo_link }}"
+          class="btn btn--ghost btn--block"
+          target="_blank"
+          rel="noopener"
+          >Live Demo</a
+        >
+        {% endif %}
+      </div>
+
+      {% if request.user.is_authenticated %}
+      <div class="detail-info__manage">
+        <a
+          href="{% url 'update-project' projectlist.id %}"
+          class="btn btn--ghost btn--block btn--sm"
+          >Edit Project</a
+        >
+        <form
+          action="{% url 'delete-project' projectlist.id %}"
+          method="post"
+          data-confirm-delete="Delete “{{ projectlist.title }}”? This can't be undone."
+        >
+          {% csrf_token %}
+          <button type="submit" class="btn btn--danger btn--block btn--sm">
+            Delete Project
+          </button>
+        </form>
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+</section>
+
+{% if related_projects %}
+<section class="section section--tint">
+  <div class="section-inner">
+    <div class="section__head">
+      <p class="eyebrow reveal">More to explore</p>
+      <h2 class="section__title reveal">Other projects in the collection.</h2>
+    </div>
+
+    <div class="grid grid--3">
+      {% for related in related_projects %}
+      <a
+        href="{% url 'view-project' related.id %}"
+        class="preview-card glass reveal"
+      >
+        <div class="preview-card__img-wrap">
+          {% if related.featured_image %}
+          <img
+            src="{{ related.featured_image.url }}"
+            alt="{{ related.title }}"
+            loading="lazy"
+          />
+          {% else %}
+          <img
+            src="https://placehold.co/800x600/EFF6FF/1D4ED8?text={{ related.title|urlencode }}"
+            alt="{{ related.title }}"
+            loading="lazy"
+          />
+          {% endif %}
+        </div>
+        <div class="preview-card__caption">
+          <h3>{{ related.title }}</h3>
+          <p>{{ related.description|truncatewords:14 }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %} {% endblock content %}
