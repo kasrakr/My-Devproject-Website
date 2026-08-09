@@ -1,7 +1,9 @@
-{% extends 'main.html' %} {% block title %}{{ projectlist.title }} ·
-DevProject{% endblock title %} {% block description %}{{
-projectlist.description|truncatewords:25 }}{% endblock description %} {% block
-content %}
+{% extends 'main.html' %}
+
+{% block title %}{{ projectlist.title }} · DevProject{% endblock title %}
+{% block description %}{{ projectlist.description|truncatewords:25 }}{% endblock description %}
+
+{% block content %}
 
 <!--
   Matches your existing view:
@@ -47,9 +49,7 @@ content %}
     <p class="eyebrow reveal">Project</p>
     <h1 class="page-head__title reveal">{{ projectlist.title }}</h1>
     <p class="page-head__subtitle reveal">
-      {% if projectlist.created_at %}Added {{ projectlist.created_at|date:"F j,
-      Y" }}{% endif %}{% if projectlist.owner %} by {{ projectlist.owner }}{%
-      endif %}
+      {% if projectlist.created_at %}Added {{ projectlist.created_at|date:"F j, Y" }}{% endif %}{% if projectlist.owner %} by {{ projectlist.owner }}{% endif %}
     </p>
   </div>
 </section>
@@ -178,7 +178,10 @@ content %}
         </div>
       </a>
       {% endfor %}
+     
+      
     </div>
   </div>
 </section>
-{% endif %} {% endblock content %}
+ {% endif %} 
+{% endblock content %}

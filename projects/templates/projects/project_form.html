@@ -1,8 +1,9 @@
-{% extends 'main.html' %} {% block title %}{% if form.instance.pk %}Edit
-Project{% else %}Create Project{% endif %} · DevProject{% endblock title %} {%
-block description %}{% if form.instance.pk %}Update the details for {{
-form.instance.title }}.{% else %}Add a new project to your DevProject
-collection.{% endif %}{% endblock description %} {% block content %}
+{% extends 'main.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit Project{% else %}Create Project{% endif %} · DevProject{% endblock title %}
+{% block description %}{% if form.instance.pk %}Update the details for {{ form.instance.title }}.{% else %}Add a new project to your DevProject collection.{% endif %}{% endblock description %}
+
+{% block content %}
 
 <!--
   Matches your real ProjectForm (fields = title, featured_image, description,
@@ -21,104 +22,68 @@ collection.{% endif %}{% endblock description %} {% block content %}
 -->
 
 <section class="page-head">
-  <div
-    class="blob"
-    style="
-      width: 360px;
-      height: 360px;
-      top: -140px;
-      right: -100px;
-      background: radial-gradient(
-        circle,
-        rgba(59, 130, 246, 0.14),
-        transparent 70%
-      );
-    "
-  ></div>
-  <div class="section-inner" style="position: relative; z-index: 1">
+  <div class="blob" style="width:360px;height:360px;top:-140px;right:-100px;background:radial-gradient(circle,rgba(59,130,246,0.14),transparent 70%);"></div>
+  <div class="section-inner" style="position:relative;z-index:1;">
     <a href="{% url 'projects' %}" class="back-link">
-      <svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6" /></svg>
+      <svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6"/></svg>
       Back to projects
     </a>
-    <p class="eyebrow reveal">
-      {% if form.instance.pk %}Edit project{% else %}New project{% endif %}
-    </p>
-    <h1 class="page-head__title reveal">
-      {% if form.instance.pk %}Update {{ form.instance.title }}{% else %}Add a
-      new project{% endif %}
-    </h1>
-    <p class="page-head__subtitle reveal">
-      {% if form.instance.pk %}Change any detail below and save when you're
-      ready.{% else %}Fill in the details below — every field can be edited
-      again later.{% endif %}
-    </p>
+    <p class="eyebrow reveal">{% if form.instance.pk %}Edit project{% else %}New project{% endif %}</p>
+    <h1 class="page-head__title reveal">{% if form.instance.pk %}Update {{ form.instance.title }}{% else %}Add a new project{% endif %}</h1>
+    <p class="page-head__subtitle reveal">{% if form.instance.pk %}Change any detail below and save when you're ready.{% else %}Fill in the details below — every field can be edited again later.{% endif %}</p>
   </div>
 </section>
 
 <section class="section">
   <div class="section-inner form-page">
-    <form
-      class="project-form glass reveal"
-      method="post"
-      enctype="multipart/form-data"
-      novalidate
-    >
-      {% csrf_token %} {% if form.non_field_errors %}
-      <div class="form-error-banner">
-        {% for error in form.non_field_errors %}
-        <p>{{ error }}</p>
-        {% endfor %}
-      </div>
-      {% endif %} {% for field in form %} {% with
-      input_type=field.field.widget.input_type %}
-      <div
-        class="field {% if field.errors %}has-error{% endif %} {% if input_type == 'file' %}field--file{% endif %} {% if input_type == 'checkbox' %}field--checkbox{% endif %}"
-      >
-        {% if input_type == 'checkbox' %}
-        <label class="field__checkbox-label" for="{{ field.id_for_label }}">
-          {{ field }}
-          <span
-            >{{ field.label }}{% if field.field.required %}<span
-              class="field__required"
-              >*</span
-            >{% endif %}</span
-          >
-        </label>
-        {% else %}
-        <label for="{{ field.id_for_label }}">
-          {{ field.label }}{% if field.field.required %}<span
-            class="field__required"
-            >*</span
-          >{% endif %}
-        </label>
 
-        {% if input_type == 'file' %}
-        <div class="file-drop" data-file-drop>
-          {{ field }}
-          <div class="file-drop__hint">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 3v12" />
-              <path d="m7 8 5-5 5 5" />
-              <path d="M5 21h14" />
-            </svg>
-            <span>Click to upload, or drag an image here</span>
-          </div>
-          <img class="file-drop__preview" alt="" data-file-preview hidden />
+    <form class="project-form glass reveal" method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="form-error-banner">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
         </div>
-        {% else %} {{ field }} {% endif %} {% endif %} {% if field.help_text %}
-        <p class="field-help">{{ field.help_text }}</p>
-        {% endif %}
-        <span class="field-error"
-          >{% if field.errors %}{{ field.errors.0 }}{% endif %}</span
-        >
-      </div>
-      {% endwith %} {% endfor %}
+      {% endif %}
+
+      {% for field in form %}
+        {% with input_type=field.field.widget.input_type %}
+        <div class="field {% if field.errors %}has-error{% endif %} {% if input_type == 'file' %}field--file{% endif %} {% if input_type == 'checkbox' %}field--checkbox{% endif %}">
+
+          {% if input_type == 'checkbox' %}
+            <label class="field__checkbox-label" for="{{ field.id_for_label }}">
+              {{ field }}
+              <span>{{ field.label }}{% if field.field.required %}<span class="field__required">*</span>{% endif %}</span>
+            </label>
+          {% else %}
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}{% if field.field.required %}<span class="field__required">*</span>{% endif %}
+            </label>
+
+            {% if input_type == 'file' %}
+              <div class="file-drop" data-file-drop>
+                {{ field }}
+                <div class="file-drop__hint">
+                  <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg>
+                  <span>Click to upload, or drag an image here</span>
+                </div>
+                <img class="file-drop__preview" alt="" data-file-preview hidden>
+              </div>
+            {% else %}
+              {{ field }}
+            {% endif %}
+          {% endif %}
+
+          {% if field.help_text %}<p class="field-help">{{ field.help_text }}</p>{% endif %}
+          <span class="field-error">{% if field.errors %}{{ field.errors.0 }}{% endif %}</span>
+        </div>
+        {% endwith %}
+      {% endfor %}
 
       <div class="project-form__actions">
-        <button type="submit" class="btn btn--primary">
-          {% if form.instance.pk %}Save Changes{% else %}Create Project{% endif
-          %}
-        </button>
+        <button type="submit" class="btn btn--primary">{% if form.instance.pk %}Save Changes{% else %}Create Project{% endif %}</button>
         <a href="{% url 'projects' %}" class="btn btn--ghost">Cancel</a>
       </div>
     </form>
@@ -126,22 +91,13 @@ collection.{% endif %}{% endblock description %} {% block content %}
     <aside class="form-tips glass reveal reveal-delay-1">
       <h3>Tips for a strong listing</h3>
       <ul class="form-tips__list">
-        <li>
-          Use a clear, descriptive title — what it does, not just a repo name.
-        </li>
-        <li>
-          Link to a live demo if you have one; it's the fastest way to show, not
-          tell.
-        </li>
-        <li>
-          List the core technologies so people can filter by what they know.
-        </li>
-        <li>
-          Keep the description short and direct — say what it does and why it
-          exists.
-        </li>
+        <li>Use a clear, descriptive title — what it does, not just a repo name.</li>
+        <li>Link to a live demo if you have one; it's the fastest way to show, not tell.</li>
+        <li>List the core technologies so people can filter by what they know.</li>
+        <li>Keep the description short and direct — say what it does and why it exists.</li>
       </ul>
     </aside>
+
   </div>
 </section>
 
