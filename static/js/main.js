@@ -10,23 +10,29 @@
   var nav = document.getElementById('siteNav');
   var navToggle = document.getElementById('navToggle');
   var navLinks = document.getElementById('navLinks');
-  var navLinkEls = navLinks.querySelectorAll('.nav__link');
+  var navLinkEls = navLinks ? navLinks.querySelectorAll('.nav__link') : [];
 
   function closeMenu() {
-    navLinks.classList.remove('is-open');
-    navToggle.classList.remove('is-open');
-    navToggle.setAttribute('aria-expanded', 'false');
+    if (navLinks) navLinks.classList.remove('is-open');
+    if (navToggle) {
+      navToggle.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
     document.body.classList.remove('no-scroll');
   }
   function openMenu() {
-    navLinks.classList.add('is-open');
-    navToggle.classList.add('is-open');
-    navToggle.setAttribute('aria-expanded', 'true');
+    if (navLinks) navLinks.classList.add('is-open');
+    if (navToggle) {
+      navToggle.classList.add('is-open');
+      navToggle.setAttribute('aria-expanded', 'true');
+    }
     document.body.classList.add('no-scroll');
   }
-  navToggle.addEventListener('click', function () {
-    if (navLinks.classList.contains('is-open')) { closeMenu(); } else { openMenu(); }
-  });
+  if (navToggle) {
+    navToggle.addEventListener('click', function () {
+      if (navLinks && navLinks.classList.contains('is-open')) { closeMenu(); } else { openMenu(); }
+    });
+  }
   navLinkEls.forEach(function (link) { link.addEventListener('click', closeMenu); });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeMenu();
@@ -37,15 +43,17 @@
   --------------------------------------------------------------------- */
   var backToTop = document.getElementById('backToTop');
   function onScroll() {
-    nav.classList.toggle('is-scrolled', window.scrollY > 12);
-    backToTop.classList.toggle('is-visible', window.scrollY > 480);
+    if (nav) nav.classList.toggle('is-scrolled', window.scrollY > 12);
+    if (backToTop) backToTop.classList.toggle('is-visible', window.scrollY > 480);
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  backToTop.addEventListener('click', function () {
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-  });
+  if (backToTop) {
+    backToTop.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    });
+  }
 
   /* ---------------------------------------------------------------------
      Smooth scroll for in-page anchor links
@@ -67,7 +75,7 @@
      Scrollspy: highlight active nav link
   --------------------------------------------------------------------- */
   var sections = document.querySelectorAll('main section[id]');
-  if ('IntersectionObserver' in window) {
+  if (navLinks && 'IntersectionObserver' in window) {
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var link = navLinks.querySelector('.nav__link[href="#' + entry.target.id + '"]');
@@ -110,64 +118,66 @@
        }).then(...);
   --------------------------------------------------------------------- */
   var form = document.getElementById('contactForm');
-  var submitBtn = document.getElementById('submitBtn');
-  var formStatus = document.getElementById('formStatus');
+  if (form) {
+    var submitBtn = document.getElementById('submitBtn');
+    var formStatus = document.getElementById('formStatus');
 
-  var validators = {
-    name: function (v) { return v.trim().length >= 2 ? '' : 'Please enter your name (2+ characters).'; },
-    email: function (v) {
-      var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(v.trim()) ? '' : 'Please enter a valid email address.';
-    },
-    message: function (v) { return v.trim().length >= 10 ? '' : 'Message should be at least 10 characters.'; }
-  };
+    var validators = {
+      name: function (v) { return v.trim().length >= 2 ? '' : 'Please enter your name (2+ characters).'; },
+      email: function (v) {
+        var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(v.trim()) ? '' : 'Please enter a valid email address.';
+      },
+      message: function (v) { return v.trim().length >= 10 ? '' : 'Message should be at least 10 characters.'; }
+    };
 
-  function fieldEls(name) {
-    var input = form.querySelector('[name="' + name + '"]');
-    var wrap = input.closest('.field');
-    var errorEl = wrap.querySelector('.field-error');
-    return { input: input, wrap: wrap, errorEl: errorEl };
-  }
+    var fieldEls = function (name) {
+      var input = form.querySelector('[name="' + name + '"]');
+      var wrap = input.closest('.field');
+      var errorEl = wrap.querySelector('.field-error');
+      return { input: input, wrap: wrap, errorEl: errorEl };
+    };
 
-  function validateField(name) {
-    var els = fieldEls(name);
-    var message = validators[name](els.input.value);
-    els.wrap.classList.toggle('has-error', !!message);
-    els.errorEl.textContent = message;
-    return !message;
-  }
+    var validateField = function (name) {
+      var els = fieldEls(name);
+      var message = validators[name](els.input.value);
+      els.wrap.classList.toggle('has-error', !!message);
+      els.errorEl.textContent = message;
+      return !message;
+    };
 
-  ['name', 'email', 'message'].forEach(function (name) {
-    var els = fieldEls(name);
-    els.input.addEventListener('blur', function () { validateField(name); });
-    els.input.addEventListener('input', function () {
-      if (els.wrap.classList.contains('has-error')) validateField(name);
+    ['name', 'email', 'message'].forEach(function (name) {
+      var els = fieldEls(name);
+      els.input.addEventListener('blur', function () { validateField(name); });
+      els.input.addEventListener('input', function () {
+        if (els.wrap.classList.contains('has-error')) validateField(name);
+      });
     });
-  });
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var validName = validateField('name');
-    var validEmail = validateField('email');
-    var validMessage = validateField('message');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var validName = validateField('name');
+      var validEmail = validateField('email');
+      var validMessage = validateField('message');
 
-    if (!validName || !validEmail || !validMessage) {
-      var firstInvalid = form.querySelector('.has-error input, .has-error textarea');
-      if (firstInvalid) firstInvalid.focus();
-      formStatus.classList.remove('is-success');
-      return;
-    }
+      if (!validName || !validEmail || !validMessage) {
+        var firstInvalid = form.querySelector('.has-error input, .has-error textarea');
+        if (firstInvalid) firstInvalid.focus();
+        formStatus.classList.remove('is-success');
+        return;
+      }
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending…';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
 
-    setTimeout(function () {
-      formStatus.classList.add('is-success');
-      form.reset();
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Send Message';
-    }, 900);
-  });
+      setTimeout(function () {
+        formStatus.classList.add('is-success');
+        form.reset();
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }, 900);
+    });
+  }
 
   /* ---------------------------------------------------------------------
      Hero code window: subtle mouse parallax
