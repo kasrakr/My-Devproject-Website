@@ -10,12 +10,10 @@
       DevProject
     </a>
 
-    <!-- {# Anchors below point back to the home page's sections. If you reuse this
-    #} {# navbar on pages other than home, keep the "{% url 'projects' %}" prefix
-    so #} {# they still resolve correctly — only a plain "#about" would break
-    there. #} -->
+
     <nav class="nav__links" id="navLinks" aria-label="Primary">
       <a href="{% url 'projects' %}" class="nav__link active">Home</a>
+      <a href="{% url 'profiles' %}" class="nav__link ">Developers</a>
       <a href="{% url 'projects' %}#about" class="nav__link">About</a>
       <a href="{% url 'projects' %}#features" class="nav__link">Features</a>
       <a href="{% url 'projects' %}#stack" class="nav__link">Stack</a>

@@ -5,26 +5,6 @@
 
 {% block content %}
 
-<!--
-  Matches your existing view:
-    projectlist -> a single Project instance (kept as "projectlist" since
-                   that's the name your view already passes in context)
-    tags        -> the project's tags, passed separately in context
-                   (e.g. tags = projectlist.tags.all() in your view),
-                   same as your original template.
-
-  Rendered defensively, so nothing breaks if a field is blank or your
-  model doesn't have it: featured_image, demo_link, created_at, owner.
-
-  Optional bonus, only renders if you pass it in:
-    related_projects -> other Project objects for the "More to explore" grid
-
-  Assumed URL names (rename to match your urls.py):
-    'projects'        -> project listing page
-    'view-project'    -> this same detail page, takes a project id
-    'update-project'  -> edit view (create-project.html doubles as this)
-    'delete-project'  -> POST endpoint that deletes the project
--->
 
 <section class="page-head">
   <div
