@@ -5,21 +5,6 @@
 
 {% block content %}
 
-<!--
-  Matches your real ProjectForm (fields = title, featured_image, description,
-  source_link, demo_link, tags) — the loop below renders whatever fields the
-  form has, in the order Meta.fields lists them, so nothing needs to be
-  hardcoded here. featured_image gets the drag-and-drop styling automatically
-  (its widget's input_type is 'file'); tags renders as a multi-select box
-  unless you've customized ProjectForm's widget for it.
-
-  Create vs. edit is detected from `form.instance.pk` — no extra context
-  variable needed. Pass ProjectForm() for create, or ProjectForm(instance=x)
-  for edit, and the headings/button switch automatically.
-
-  Assumed URL names (rename to match your urls.py):
-    'projects'  -> the project listing page, used for "Back to projects" / Cancel
--->
 
 <section class="page-head">
   <div class="blob" style="width:360px;height:360px;top:-140px;right:-100px;background:radial-gradient(circle,rgba(59,130,246,0.14),transparent 70%);"></div>
