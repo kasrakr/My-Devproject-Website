@@ -1,32 +1,11 @@
 {% extends 'main.html' %}
+{% load static %}
 
 {% block title %}Projects · DevProject{% endblock title %}
 {% block description %}Browse the full collection of programming projects on DevProject.{% endblock description %}
 
 {% block content %}
 
-<!--
-  Matches your real view (views.projects):
-    projectlist -> queryset of Project objects. Cards below use title,
-                   vote_ratio, vote_total, created, and id — plus
-                   featured_image if present, falling back to a
-                   placeholder graphic if not.
-    page        -> not used in the page body itself; navbar.html now
-                   uses it to mark the "Projects" nav link active
-                   ({% if page == 'projects' %}...{% endif %}).
-    number      -> not currently used anywhere in this design.
-
-  Confirmed URL names (from your urls.py):
-    'projects'        -> this page
-    'project'         -> project detail page, takes a project id
-    'create-project'  -> create form
-    'update-project'  -> edit form, takes a project id
-    'delete-project'  -> POST endpoint that deletes a project, takes a project id
-
-  Edit/Delete are gated behind an is_authenticated check as a placeholder —
-  swap for a real ownership check (e.g. proj.owner == request.user.profile)
-  once ownership is wired up on the Project model.
--->
  <!-- ============================= HERO ============================= -->
   <section class="hero" id="home">
     <canvas class="hero__canvas" id="particleCanvas" aria-hidden="true"></canvas>
@@ -48,37 +27,57 @@
             <span class="stat-chip__label">DJANGO ORM</span>
           </div>
           <div class="stat-chip glass" role="listitem">
-            <span class="stat-chip__value">4</span>
-            <span class="stat-chip__label">CRUD OPS</span>
+            <span class="stat-chip__value">SKU</span>
+            <span class="stat-chip__label">University</span>
           </div>
           <div class="stat-chip glass" role="listitem">
-            <span class="stat-chip__value">MIT</span>
-            <span class="stat-chip__label">LICENSED</span>
+            <span class="stat-chip__value">First</span>
+            <span class="stat-chip__label">Personal Website</span>
           </div>
         </div>
       </div>
 
-      <div class="hero__visual">
-        <div class="code-window glass" id="codeWindow">
-          <div class="code-window__bar">
-            <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-            <span class="code-window__file">models.py</span>
-          </div>
-          <pre class="code-window__body"><code><span class="tok-kw">class</span> <span class="tok-cls">Project</span>(models.Model):
-    title = models.CharField(max_length=<span class="tok-fn">120</span>)
-    description = models.TextField()
-    tech_stack = models.CharField(max_length=<span class="tok-fn">200</span>)
-    repo_url = models.URLField()
-    created_at = models.DateTimeField(
-        auto_now_add=<span class="tok-kw">True</span>
-    )
-
-    <span class="tok-kw">def</span> <span class="tok-fn">__str__</span>(self):
-        <span class="tok-cm"># shown in the admin &amp; templates</span>
-        <span class="tok-kw">return</span> <span class="tok-str">self.title</span></code></pre>
-        </div>
-      </div>
+     <div class="code-window">
+  <div class="code-header">
+    <div class="window-dots">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
+
+    <div class="code-file">
+      <span class="file-icon">◆</span>
+      DEVPROJECT.py
+    </div>
+
+    <div class="code-status">
+      <span class="status-dot"></span>
+      Django
+    </div>
+  </div>
+
+  <div class="code-body">
+    <pre><code><span class="line"><span class="line-number">01</span><span class="tok-kw">from</span> <span class="tok-str">projects.models</span> <span class="tok-kw">import</span> <span class="tok-fn">Project</span></span>
+<span class="line"><span class="line-number">02</span><span class="tok-var">project</span> = <span class="tok-fn">Project.objects.create</span>(</span>
+<span class="line"><span class="line-number">02</span>    <span class="tok-var">title</span>=<span class="tok-str">"DevProject"</span>,</span>
+<span class="line"><span class="line-number">03</span>    <span class="tok-var">stack</span>=[<span class="tok-str">"Django"</span>, <span class="tok-str">"Python"</span>],</span>
+<span class="line"><span class="line-number">04</span>    <span class="tok-var">visibility</span>=<span class="tok-str">"public")</span></span>
+<span class="line"><span class="line-number">05</span><span class="tok-cm"># Publish project</span></span>
+<span class="line"><span class="line-number">06</span><span class="tok-fn">project.publish</span>()</span>
+<span class="line"><span class="line-number">07</span><span class="tok-kw">return</span> <span class="tok-var">project</span></span></code></pre>
+
+    <div class="code-result">
+      <div class="result-icon">✓</div>
+
+      <div class="result-content">
+        <span class="result-title">Project created successfully</span>
+        <span class="result-meta">ID #0042 · Published · Django ORM</span>
+      </div>
+
+      <span class="result-arrow">→</span>
+    </div>
+  </div>
+</div>
 
     <div class="hero__scroll-cue"><span></span></div>
   </section>
@@ -88,7 +87,7 @@
     <div class="section-inner about">
       <div class="about__media">
         <div class="about__frame glass reveal">
-          <img src="https://placehold.co/640x480/3B82F6/ffffff?text=Project+Dashboard" alt="Placeholder preview representing the DevProject dashboard interface" loading="lazy" width="640" height="480">
+          <img src="{% static 'images/first_banner.png' %}" alt="Placeholder preview representing the DevProject dashboard interface" loading="lazy" width="640" height="480">
         </div>
       </div>
       <div class="about__content">
@@ -104,18 +103,7 @@
       </div>
     </div>
   </section>
-
-<section class="page-head">
-  <div class="blob" style="width:360px;height:360px;top:-140px;right:-100px;background:radial-gradient(circle,rgba(59,130,246,0.14),transparent 70%);"></div>
-  <div class="section-inner" style="position:relative;z-index:1;">
-    <p class="eyebrow reveal">Projects</p>
-    <h1 class="page-head__title reveal">Every project in one place.</h1>
-    <p class="page-head__subtitle reveal">Browse the full collection, or add your own.</p>
-    <div class="reveal" style="margin-top: 1.5rem;">
-      <a href="{% url 'create-project' %}" class="btn btn--primary">Create Project</a>
-    </div>
-  </div>
-</section>
+  
  <!-- ============================= FEATURES ============================= -->
   <section class="section section--tint" id="features">
     <div class="blob" style="width:420px;height:420px;top:-120px;left:-140px;background:radial-gradient(circle,rgba(59,130,246,0.16),transparent 70%);"></div>
@@ -184,7 +172,7 @@
       <div class="section__head">
         <p class="eyebrow reveal">Built with</p>
         <h2 class="section__title reveal">A familiar, dependable stack.</h2>
-        <p class="section__lede reveal">No exotic dependencies. Just Python and Django, used the way they're meant to be.</p>
+        <p class="section__lede reveal">No exotic dependencies. Used the way they're meant to be.</p>
       </div>
 
       <div class="stack-grid">
@@ -201,12 +189,12 @@
           <div><div class="stack-badge__name">Django ORM</div><div class="stack-badge__desc">Data layer</div></div>
         </div>
         <div class="stack-badge glass reveal">
-          <div class="stack-badge__mark">Tp</div>
-          <div><div class="stack-badge__name">Django Templates</div><div class="stack-badge__desc">Server-rendered views</div></div>
+          <div class="stack-badge__mark">CS</div>
+          <div><div class="stack-badge__name">HTML & CSS</div><div class="stack-badge__desc">Used for Front-End Desing</div></div>
         </div>
         <div class="stack-badge glass reveal reveal-delay-1">
           <div class="stack-badge__mark">Db</div>
-          <div><div class="stack-badge__name">SQLite / PostgreSQL</div><div class="stack-badge__desc">Storage backend</div></div>
+          <div><div class="stack-badge__name">SQLite</div><div class="stack-badge__desc">Storage backend</div></div>
         </div>
         <div class="stack-badge glass reveal reveal-delay-2">
           <div class="stack-badge__mark">Gt</div>
@@ -251,8 +239,8 @@
   <div class="section-inner">
     <div class="section__head">
         <p class="eyebrow reveal">Projects List</p>
-        <h2 class="section__title reveal">Let's take a look at a Projects.</h2>
-        <p class="section__lede reveal">A quick look at the core views.</p>
+        <h2 class="section__title reveal">Every project in one place.</h2>
+        <p class="section__lede reveal">Browse the full collection, or add your own.</p>
       </div>
 
     {% if projectlist %}
@@ -311,8 +299,8 @@
         <h2 class="section__title reveal">Running locally in five commands.</h2>
         <p class="reveal">Clone the repository, install dependencies, and point Django at a database. No extra configuration needed to see your first project on the page.</p>
         <div class="get-started__actions reveal">
-          <a href="#contact" class="btn btn--primary">Talk to us</a>
-          <a href="https://github.com" class="btn btn--ghost" target="_blank" rel="noopener">Star on GitHub</a>
+          <a href="https://t.me/LowKasra" class="btn btn--primary">Contact me</a>
+          <a href="https://github.com/kasrakr/My-Devproject-Website" class="btn btn--ghost" target="_blank" rel="noopener">Star on GitHub</a>
         </div>
       </div>
 
@@ -321,7 +309,7 @@
           <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
           <span class="code-window__file">terminal</span>
         </div>
-        <pre class="terminal__body"><code><span class="prompt">$</span> git clone https://github.com/your-org/devproject.git
+        <pre class="terminal__body"><code><span class="prompt">$</span> git clone https://github.com/kasrakr/My-Devproject-Website
 <span class="prompt">$</span> cd devproject
 <span class="prompt">$</span> pip install -r requirements.txt
 <span class="prompt">$</span> python manage.py migrate
@@ -342,7 +330,7 @@
         <div class="contact__cards reveal">
           <div class="info-card glass">
             <div class="info-card__icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></div>
-            <div><div class="info-card__label">Email</div><div class="info-card__value">hello@devproject.io</div></div>
+            <div><div class="info-card__label">Email</div><div class="info-card__value">kasrakarimaian84@gmail.com</div></div>
           </div>
           <div class="info-card glass">
             <div class="info-card__icon"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg></div>
@@ -350,23 +338,28 @@
           </div>
           <div class="info-card glass">
             <div class="info-card__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>
-            <div><div class="info-card__label">Response time</div><div class="info-card__value">Within 2 business days</div></div>
+            <div><div class="info-card__label">Response time</div><div class="info-card__value">Less than an hour.</div></div>
           </div>
         </div>
 
         <div class="social-links reveal">
-          <a href="https://github.com" target="_blank" rel="noopener" aria-label="DevProject on GitHub">
+          <a href="https://github.com/kasrakr" target="_blank" rel="noopener" aria-label="DevProject on GitHub">
             <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.6 2 12.2c0 4.5 2.9 8.3 6.8 9.6.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.3-3.4-1.3-.4-1.1-1-1.4-1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.4 4.8-4.6 5 .3.3.6.9.6 1.8v2.6c0 .3.2.6.7.5 3.9-1.3 6.8-5.1 6.8-9.6C22 6.6 17.5 2 12 2Z"/></svg>
           </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="DevProject on X">
-            <svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4 4 20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-          </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="DevProject on LinkedIn">
+        <a href="https://t.me/LowKasra"
+   target="_blank"
+   rel="noopener"
+   aria-label="DevProject on Telegram">
+
+    <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21.5 3.5 2.9 10.7c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.5c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.8 3.5c.9.5 1.6.3 1.8-.8l3.1-14.7c.3-1.4-.5-2-1.7-1.3zM8.2 13.4l10.8-6.8c.5-.3.9-.1.5.2l-8.8 7.9-.3 3.2-1.7-4.5-1.9-.6c-.4-.1-.4-.4.1-.6z"/>
+    </svg>
+
+</a>
+          <a href="https://www.linkedin.com/in/kasrakarimian/" target="_blank" rel="noopener" aria-label="DevProject on LinkedIn">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><rect x="6.3" y="9.7" width="2.4" height="8" fill="#fff"/><circle cx="7.5" cy="6.6" r="1.4" fill="#fff"/><path d="M11.4 17.7V9.7h2.3v1.1c.5-.7 1.3-1.3 2.5-1.3 1.9 0 3.1 1.2 3.1 3.6v4.6h-2.4v-4.2c0-1.1-.4-1.8-1.4-1.8-.8 0-1.2.5-1.4 1-.1.2-.1.5-.1.8v4.2h-2.6Z" fill="#fff"/></svg>
           </a>
-          <a href="https://discord.com" target="_blank" rel="noopener" aria-label="DevProject on Discord">
-            <svg viewBox="0 0 24 24"><path d="M8 5.5C6 6 4.5 7.5 4 9.5c-.7 3-1 6.5.3 8.5 1.5 1 3 1.6 4.6 1.9l.9-1.5c-.8-.3-1.5-.6-2.2-1.1 1.5.9 3.2 1.4 4.9 1.4 1.7 0 3.4-.5 4.9-1.4-.7.5-1.4.8-2.2 1.1l.9 1.5c1.6-.3 3.1-.9 4.6-1.9 1.5-2.4.7-5.8-.1-8.5-.6-2-2-3.5-4-4-1-.2-2.5-.5-4-.5s-3 .3-4 .5Z"/><circle cx="9.3" cy="12.3" r="1.3" fill="#fff"/><circle cx="14.7" cy="12.3" r="1.3" fill="#fff"/></svg>
-          </a>
+
         </div>
       </div>
 

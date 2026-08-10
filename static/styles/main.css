@@ -241,7 +241,7 @@ textarea:focus-visible {
   color: var(--color-ink);
 }
 .nav__brand #logo {
-  height: 28px;
+  height: 70px;
   width: auto;
   display: block;
 }
@@ -496,6 +496,303 @@ textarea:focus-visible {
   .hero__stats { gap: 0.6rem; }
   .stat-chip { padding: 0.55rem 0.85rem; }
 }
+
+.code-window {
+  width: 100%;
+  max-width: 620px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 30px 70px rgba(30, 80, 180, 0.12),
+    0 10px 30px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(12px);
+}
+
+/* Header */
+
+.code-header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.07);
+  background: rgba(248, 250, 252, 0.9);
+}
+
+.window-dots {
+  display: flex;
+  gap: 7px;
+}
+
+.window-dots span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #cbd5e1;
+}
+
+.window-dots span:nth-child(1) {
+  background: #ff6b61;
+}
+
+.window-dots span:nth-child(2) {
+  background: #ffbd44;
+}
+
+.window-dots span:nth-child(3) {
+  background: #28c840;
+}
+
+.code-file {
+  margin-left: 22px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.01em;
+}
+
+.file-icon {
+  color: #3776ab;
+  margin-right: 7px;
+}
+
+.code-status {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+}
+
+/* Code */
+
+.code-body {
+  position: relative;
+  padding: 28px 0 0;
+}
+
+.code-body pre {
+  margin: 0;
+  padding: 0 28px 26px;
+  overflow-x: auto;
+  font-family:
+    "JetBrains Mono",
+    "Fira Code",
+    Consolas,
+    monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  color: #334155;
+}
+
+.code-body code {
+  display: block;
+}
+
+.line {
+  display: block;
+  white-space: pre;
+}
+
+.line-number {
+  display: inline-block;
+  width: 32px;
+  margin-right: 18px;
+  color: #cbd5e1;
+  user-select: none;
+  text-align: right;
+}
+
+/* Syntax highlighting */
+
+.tok-kw {
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+.tok-fn {
+  color: #2563eb;
+}
+
+.tok-str {
+  color: #059669;
+}
+
+.tok-cm {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.tok-var {
+  color: #0f172a;
+}
+
+/* Result */
+
+.code-result {
+  margin: 0 20px 20px;
+  padding: 14px 16px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  border-radius: 13px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+
+  animation: resultPulse 3s ease-in-out infinite;
+}
+
+.result-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+
+  border-radius: 8px;
+
+  background: #dcfce7;
+  color: #16a34a;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.result-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.result-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.result-meta {
+  font-size: 10px;
+  color: #94a3b8;
+  font-family: monospace;
+}
+
+.result-arrow {
+  margin-left: auto;
+  color: #2563eb;
+  font-size: 18px;
+}
+
+@keyframes resultPulse {
+  0%,
+  100% {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  50% {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.07);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 700px) {
+  .code-window {
+    border-radius: 18px;
+  }
+
+  .code-header {
+    padding: 0 15px;
+  }
+
+  .code-file {
+    margin-left: 14px;
+    font-size: 12px;
+  }
+
+  .code-status {
+    display: none;
+  }
+
+  .code-body pre {
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 11px;
+  }
+
+  .line-number {
+    width: 24px;
+    margin-right: 12px;
+  }
+}
+
+/* Typing animation */
+
+.code-body .line {
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.code-body .line.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Blinking cursor */
+
+.code-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 15px;
+  margin-left: 3px;
+  vertical-align: -2px;
+  background: #2563eb;
+  animation: blinkCursor 0.8s infinite;
+}
+
+@keyframes blinkCursor {
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Result starts hidden */
+
+.code-result {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.code-result.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 
 /* ==========================================================================
    8. REVEAL ANIMATION
