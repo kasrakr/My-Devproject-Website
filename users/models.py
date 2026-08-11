@@ -27,7 +27,7 @@ class profile(models.Model):
 
 
 class skill(models.Model):
-    owner = models.ForeignKey(profile, on_delete=models.CASCADE, null=True, blank=True)# if profile deleted delete all the skills
+    owner = models.ForeignKey(profile, on_delete=models.CASCADE, null=True, blank=True, related_name='skills')# if profile deleted delete all the skills
     name = models.CharField(max_length=200, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)

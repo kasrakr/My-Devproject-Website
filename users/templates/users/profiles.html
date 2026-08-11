@@ -1,3 +1,4 @@
+
 {% extends 'main.html' %}
 
 {% block content%}
@@ -127,6 +128,17 @@
           <p class="developer-card__bio">
             {{ profile.bio|truncatechars:120 }}
           </p>
+          {% endif %}
+
+          {% if profile.skills.all %}
+          <div class="developer-card__skills">
+            {% for skill in profile.skills.all|slice:":5" %}
+            <span class="skill-tag">{{ skill.name }}</span>
+            {% endfor %}
+            {% if profile.skills.all.count > 5 %}
+            <span class="skill-tag skill-tag--more">+{{ profile.skills.all.count|add:"-5" }}</span>
+            {% endif %}
+          </div>
           {% endif %}
 
           <div class="developer-card__socials">
