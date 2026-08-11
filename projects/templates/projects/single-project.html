@@ -107,16 +107,11 @@
           class="btn btn--ghost btn--block btn--sm"
           >Edit Project</a
         >
-        <form
-          action="{% url 'delete-project' projectlist.id %}"
-          method="post"
-          data-confirm-delete="Delete “{{ projectlist.title }}”? This can't be undone."
+        <a
+          href="{% url 'delete-project' projectlist.id %}"
+          class="btn btn--danger btn--block btn--sm"
+          >Delete Project</a
         >
-          {% csrf_token %}
-          <button type="submit" class="btn btn--danger btn--block btn--sm">
-            Delete Project
-          </button>
-        </form>
       </div>
       {% endif %}
     </aside>
@@ -134,7 +129,7 @@
     <div class="grid grid--3">
       {% for related in related_projects %}
       <a
-        href="{% url 'view-project' related.id %}"
+        href="{% url 'project' related.id %}"
         class="preview-card glass reveal"
       >
         <div class="preview-card__img-wrap">

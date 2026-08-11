@@ -30,8 +30,6 @@
     <script src='{% static "js/main.js" %}' defer></script>
 
     {% block extra_head %}{% endblock extra_head %}
-    <!--  linking to css file with django! -->
-    <script src="main.js"></script>
     <script>
 document.addEventListener("DOMContentLoaded", () => {
   const codeWindow = document.querySelector(".code-window");
@@ -155,14 +153,18 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
   </head>
   <body>
-    {%include 'navbar.html'%} {% block content %} {% endblock content %}
+    <a class="skip-link" href="#main">Skip to content</a>
+    {%include 'navbar.html'%}
+    <main id="main">
+      {% block content %} {% endblock content %}
+    </main>
     <footer class="footer">
   <div class="section-inner footer__inner">
-    <p>&copy; <span id="year">2026</span> DevProject. All rights reserved, Kasra Karimian.</p>
+    <p>&copy; {% now "Y" %} DevProject. All rights reserved, Kasra Karimian.</p>
     <div class="footer__links">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      <a href="{% url 'projects' %}#home">Home</a>
+      <a href="{% url 'projects' %}#about">About</a>
+      <a href="{% url 'projects' %}#contact">Contact</a>
     </div>
     <div class="social-links social-links--footer">
       <a
