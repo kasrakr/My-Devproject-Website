@@ -1,12 +1,372 @@
+
+
++++ users/templates/users/profiles.html (修改后)
 {% extends 'main.html' %}
 
-
 {% block content%}
+<!-- Hero Section -->
+<section class="hero developers-hero">
+  <div class="hero__canvas">
+    <!-- Decorative blobs -->
+    <div class="blob" style="top: -10%; right: -5%; width: 420px; height: 420px; background: rgba(59, 130, 246, 0.12);"></div>
+    <div class="blob" style="bottom: 10%; left: -8%; width: 380px; height: 380px; background: rgba(37, 99, 235, 0.10);"></div>
+  </div>
 
-{% for profile in profiles %}
-<img src="{{profile.profile_image.url}}"/>
-{% endfor %}
+  <div class="section-inner">
+    <div class="hero__inner">
+      <div class="hero__content">
+        <span class="eyebrow">👋 Meet Our Talent</span>
+        <h1 class="hero__title">
+          Discover <span class="text-gradient">Amazing Developers</span> Ready to Build
+        </h1>
+        <p class="hero__subtitle">
+          Connect with skilled professionals passionate about creating innovative solutions.
+          From full-stack engineers to UI/UX specialists – find your perfect collaborator.
+        </p>
 
+        <div class="hero__actions">
+          <a href="#developers" class="btn btn--primary">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            Browse Developers
+          </a>
+          <a href="{% url 'projects' %}" class="btn btn--ghost">
+            Back to Home
+          </a>
+        </div>
 
+        <div class="hero__stats">
+          <div class="stat-chip">
+            <span class="stat-chip__value">{{ profiles.count }}+</span>
+            <span class="stat-chip__label">Developers</span>
+          </div>
+          <div class="stat-chip">
+            <span class="stat-chip__value">Global</span>
+            <span class="stat-chip__label">Reach</span>
+          </div>
+          <div class="stat-chip">
+            <span class="stat-chip__value">100%</span>
+            <span class="stat-chip__label">Verified</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="code-window">
+          <div class="code-header">
+            <div class="window-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <span class="code-file">developers.py</span>
+          </div>
+          <div class="code-body">
+            <div class="line"><span class="kw">class</span> <span class="cls">Developer</span>:</div>
+            <div class="line">  <span class="kw">def</span> <span class="fn">__init__</span>(self):</div>
+            <div class="line">    self.skills = [<span class="str">"Python"</span>, <span class="str">"Django"</span>, <span class="str">"React"</span>]</div>
+            <div class="line">    self.passion = <span class="str">"Building Amazing Products"</span></div>
+            <div class="line">    self.available = <span class="bool">True</span></div>
+            <div class="line">  </div>
+            <div class="line">  <span class="kw">def</span> <span class="fn">collaborate</span>(self):</div>
+            <div class="line">    <span class="kw">return</span> <span class="str">"Let's create something great!"</span></div>
+            <div class="line"></div>
+          </div>
+          <div class="code-result show">
+            <span class="prompt">&gt;&gt;&gt;</span>
+            <span class="output">Developer instance ready for collaboration!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__scroll-cue">
+    <span></span>
+  </div>
+</section>
+
+<!-- Developers Grid Section -->
+<section class="section section--tint" id="developers">
+  <div class="section-inner">
+    <div class="section__head">
+      <span class="eyebrow">Talented Professionals</span>
+      <h2 class="section__title">Featured Developers</h2>
+      <p class="section__lede">Explore profiles of talented developers ready to bring your ideas to life</p>
+    </div>
+
+    <div class="grid grid--3">
+      {% for profile in profiles %}
+      <article class="glass developer-card">
+        <div class="developer-card__header">
+          <div class="developer-card__avatar">
+            {% if profile.profile_image %}
+              <img src="{{ profile.profile_image.url }}" alt="{{ profile.name|default:profile.username }}" />
+            {% else %}
+              <div class="developer-card__avatar-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
+            {% endif %}
+          </div>
+          <div class="developer-card__status {% if profile.bio %}is-active{% endif %}"></div>
+        </div>
+
+        <div class="developer-card__body">
+          <h3 class="developer-card__name">
+            {{ profile.name|default:profile.username }}
+          </h3>
+          <p class="developer-card__role">
+            {{ profile.short_intro|default:"Full Stack Developer" }}
+          </p>
+
+          {% if profile.bio %}
+          <p class="developer-card__bio">
+            {{ profile.bio|truncatechars:120 }}
+          </p>
+          {% endif %}
+
+          <div class="developer-card__socials">
+            {% if profile.social_github %}
+            <a href="{{ profile.social_github }}" target="_blank" rel="noopener" aria-label="GitHub Profile" class="social-link">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.5 2 2 6.6 2 12.2c0 4.5 2.9 8.3 6.8 9.6.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.3-3.4-1.3-.4-1.1-1-1.4-1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.4 4.8-4.6 5 .3.3.6.9.6 1.8v2.6c0 .3.2.6.7.5 3.9-1.3 6.8-5.1 6.8-9.6C22 6.6 17.5 2 12 2Z"/>
+              </svg>
+            </a>
+            {% endif %}
+
+            {% if profile.social_linkedin %}
+            <a href="{{ profile.social_linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn Profile" class="social-link">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <rect x="3" y="3" width="18" height="18" rx="4" />
+                <rect x="6.3" y="9.7" width="2.4" height="8" fill="#fff" />
+                <circle cx="7.5" cy="6.6" r="1.4" fill="#fff" />
+                <path d="M11.4 17.7V9.7h2.3v1.1c.5-.7 1.3-1.3 2.5-1.3 1.9 0 3.1 1.2 3.1 3.6v4.6h-2.4v-4.2c0-1.1-.4-1.8-1.4-1.8-.8 0-1.2.5-1.4 1-.1.2-.1.5-.1.8v4.2h-2.6Z" fill="#fff"/>
+              </svg>
+            </a>
+            {% endif %}
+
+            {% if profile.social_website %}
+            <a href="{{ profile.social_website }}" target="_blank" rel="noopener" aria-label="Website" class="social-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </a>
+            {% endif %}
+
+            {% if profile.social_whatsapp %}
+            <a href="{{ profile.social_whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp" class="social-link">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.04 2C6.5 2 2 6.48 2 12c0 1.77.46 3.43 1.34 4.91L2 22l5.22-1.37A9.94 9.94 0 0 0 12.04 22C17.56 22 22 17.52 22 12S17.56 2 12.04 2Zm0 18.2a8.18 8.18 0 0 1-4.17-1.14l-.3-.18-3.1.81.83-3.02-.2-.31A8.15 8.15 0 1 1 12.04 20.2Zm4.48-6.1c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.57.13-.17.25-.65.81-.8.98-.15.17-.3.19-.55.06-.25-.13-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.7-.14-.25-.02-.39.11-.52.12-.12.25-.3.38-.45.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.45.06-.69.32-.23.25-.9.88-.9 2.14s.92 2.48 1.05 2.65c.13.17 1.8 2.75 4.36 3.85.61.26 1.09.42 1.46.54.61.19 1.17.16 1.61.1.49-.07 1.48-.61 1.69-1.2.21-.59.21-1.1.15-1.2-.06-.11-.23-.17-.48-.3Z"/>
+              </svg>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="developer-card__footer">
+          <a href="#" class="btn btn--primary btn--block btn--sm">
+            View Profile
+          </a>
+        </div>
+      </article>
+      {% empty %}
+      <div class="empty-state">
+        <div class="glass" style="padding: 2rem; border-radius: var(--radius-lg);">
+          <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="var(--color-muted)" stroke-width="1.5" style="margin: 0 auto 1rem;">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <h3>No Developers Yet</h3>
+          <p>Be the first to join our community of talented developers!</p>
+          <a href="#" class="btn btn--primary">Create Your Profile</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+/* Developer Hero Overrides */
+.developers-hero {
+  min-height: 90vh;
+}
+
+/* Developer Card Styles */
+.developer-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.developer-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px rgba(30, 64, 175, 0.2);
+}
+
+.developer-card__header {
+  position: relative;
+  padding: 2rem 1.5rem 1rem;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.05) 100%);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.developer-card__avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #fff;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+  background: linear-gradient(135deg, var(--color-primary-50), var(--color-primary-100));
+}
+
+.developer-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.developer-card__avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-600);
+}
+
+.developer-card__avatar-placeholder svg {
+  width: 50px;
+  height: 50px;
+}
+
+.developer-card__status {
+  position: absolute;
+  bottom: 12px;
+  right: calc(50% - 50px);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  border: 2px solid #fff;
+}
+
+.developer-card__status.is-active {
+  background: #22c55e;
+}
+
+.developer-card__body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.developer-card__name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 0;
+}
+
+.developer-card__role {
+  font-size: 0.875rem;
+  color: var(--color-primary-600);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  margin: 0;
+}
+
+.developer-card__bio {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.developer-card__socials {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.social-link {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-tint);
+  color: var(--color-muted);
+  transition: all 0.2s var(--ease);
+}
+
+.social-link:hover {
+  background: var(--color-primary);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.social-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.developer-card__footer {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--color-line);
+}
+
+@media (max-width: 900px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero__visual {
+    order: -1;
+    margin-bottom: 2rem;
+  }
+
+  .hero__stats {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .developer-card__header {
+    padding: 1.5rem 1rem 0.75rem;
+  }
+
+  .developer-card__avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .developer-card__body {
+    padding: 1.25rem;
+  }
+}
+</style>
 
 {% endblock %}
