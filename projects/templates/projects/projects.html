@@ -37,7 +37,8 @@
         </div>
       </div>
 
-     <div class="code-window">
+      <div class="hero__visual">
+     <div class="code-window" id="codeWindow">
   <div class="code-header">
     <div class="window-dots">
       <span></span>
@@ -78,6 +79,8 @@
     </div>
   </div>
 </div>
+      </div>
+    </div>
 
     <div class="hero__scroll-cue"><span></span></div>
   </section>
@@ -269,10 +272,7 @@
           <a href="{% url 'project' proj.id %}" class="btn btn--ghost btn--sm">View</a>
           {% if request.user.is_authenticated %}
             <a href="{% url 'update-project' proj.id %}" class="btn btn--ghost btn--sm">Edit</a>
-            <form action="{% url 'delete-project' proj.id %}" method="post" class="project-card__delete-form" data-confirm-delete="Delete “{{ proj.title }}”? This can't be undone.">
-              {% csrf_token %}
-              <button type="submit" class="btn btn--danger btn--sm">Delete</button>
-            </form>
+            <a href="{% url 'delete-project' proj.id %}" class="btn btn--danger btn--sm">Delete</a>
           {% endif %}
         </div>
       </article>
