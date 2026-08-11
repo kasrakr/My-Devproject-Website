@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 class profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # cascade means anytime user deleted profile will deletes too.
     name = models.CharField(max_length=200, null=True, blank=True)
+    location = models.CharField(max_length=200, null=True, blank=True)
     username = models.CharField(max_length=200, null=True, blank=True)
     email = models.EmailField(max_length=200, null=True, blank=True)
     short_intro = models.CharField(max_length=200, null=True, blank=True)
@@ -23,3 +24,13 @@ class profile(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     def __str__(self):
         return str(self.user.username)
+
+
+class skill(models.Model):
+    owner = models.ForeignKey(profile, on_delete=models.CASCADE, null=True, blank=True)# if profile deleted delete all the skills
+    name = models.CharField(max_length=200, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    def __str__(self):
+        return str(self.name)
