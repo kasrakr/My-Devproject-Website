@@ -2,5 +2,11 @@
 
 
 {% block content%}
-<h1>hello guys</h1>
+
+{% for profile in profiles %}
+<img src="{{profile.profile_image.url}}"/>
+{% endfor %}
+
+
+
 {% endblock %}

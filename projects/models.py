@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 # Create your models here.
+from users.models import profile
 
 class tag (models.Model):
     name = models.CharField(max_length=200)
@@ -11,6 +12,7 @@ class tag (models.Model):
 
 #whenwever you add sth to your models you should first makemigrations and then migrate it.
 class Project(models.Model):
+    owner = models.ForeignKey(profile, null=True, blank=True, on_delete = models.SET_NULL)
     title = models.CharField (max_length=200)
     description = models.TextField (null=True, blank=True) #null is for db and blank is for usert to be empty
     demo_link = models.TextField (max_length=2000, null=True, blank=True)
