@@ -264,7 +264,11 @@
           </a>
           <div class="project-card__meta">
             <span class="project-card__votes">{{ proj.vote_ratio }}%<span class="project-card__votes-total"> · {{ proj.vote_total }} vote{{ proj.vote_total|pluralize }}</span></span>
-            <span class="project-card__votes">{{proj.owner}}</span>
+            <span class="project-card__votes">
+    <a href="{% url 'userProfile' proj.owner.id %}">
+        {{ proj.owner }}
+    </a>
+</span>
             <span class="project-card__date">{{ proj.created|date:"M j, Y" }}</span>
           </div>
         </div>

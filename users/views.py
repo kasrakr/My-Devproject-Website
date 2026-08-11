@@ -12,6 +12,10 @@ def userProfile(request, pk):
     skills = profile_item.skills.all()
     skills_count = skills.count()
 
+    # Get user's projects
+    projects = profile_item.project_set.all().order_by('-created')
+    projects_count = projects.count()
+
     # Count social links
     social_count = 0
     if profile_item.social_github: social_count += 1
@@ -25,6 +29,8 @@ def userProfile(request, pk):
         'profile': profile_item,
         'skills': skills,
         'skills_count': skills_count,
-        'social_count': social_count
+        'social_count': social_count,
+        'projects': projects,
+        'projects_count': projects_count
     }
     return render(request, 'users/userProfile.html', context)

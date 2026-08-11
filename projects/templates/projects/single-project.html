@@ -29,7 +29,10 @@
     <p class="eyebrow reveal">Project</p>
     <h1 class="page-head__title reveal">{{ projectlist.title }}</h1>
     <p class="page-head__subtitle reveal">
-      {% if projectlist.created_at %}Added {{ projectlist.created_at|date:"F j, Y" }}{% endif %}{% if projectlist.owner %} by {{ projectlist.owner }}{% endif %}
+      {% if projectlist.created_at %}Added {{ projectlist.created_at|date:"F j, Y" }}{% endif %}{% if projectlist.owner %}
+       by <a href="{% url 'userProfile' projectlist.owner.id %}" class="project-card__votes">
+        {{ projectlist.owner }}
+    </a>{% endif %}
     </p>
   </div>
 </section>
