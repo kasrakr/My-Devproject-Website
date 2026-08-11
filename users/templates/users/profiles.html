@@ -1,4 +1,6 @@
 
+
++++ users/templates/users/profiles.html (修改后)
 {% extends 'main.html' %}
 
 {% block content%}
@@ -182,7 +184,7 @@
         </div>
 
         <div class="developer-card__footer">
-          <a href="{% url 'user-profile' profile.id %}" class="btn btn--primary btn--block btn--sm">
+          <a href="{% url 'userProfile' profile.id %}" class="btn btn--primary btn--block btn--sm">
             View Profile
           </a>
         </div>

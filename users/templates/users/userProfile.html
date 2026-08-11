@@ -1,0 +1,286 @@
+
+{% extends 'main.html' %}
+
+{% block content%}
+<!-- Hero Section -->
+<section class="hero profile-hero">
+  <div class="hero__canvas">
+    <!-- Decorative blobs -->
+    <div class="blob" style="top: -10%; right: -5%; width: 420px; height: 420px; background: rgba(59, 130, 246, 0.12);"></div>
+    <div class="blob" style="bottom: 10%; left: -8%; width: 380px; height: 380px; background: rgba(37, 99, 235, 0.10);"></div>
+  </div>
+
+  <div class="section-inner">
+    <div class="profile-hero__content reveal">
+      <a href="{% url 'profiles' %}" class="btn btn--ghost btn--sm back-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Developers
+      </a>
+
+      <div class="profile-header">
+        <div class="profile-avatar-wrapper">
+          <div class="profile-avatar">
+            {% if profile.profile_image %}
+              <img src="{{ profile.profile_image.url }}" alt="{{ profile.name|default:profile.username }}" />
+            {% else %}
+              <div class="profile-avatar-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
+            {% endif %}
+          </div>
+          <div class="profile-status {% if profile.bio %}is-active{% endif %}"></div>
+        </div>
+
+        <div class="profile-info">
+          <h1 class="profile-name">{{ profile.name|default:profile.username }}</h1>
+          <p class="profile-role">{{ profile.short_intro|default:"Full Stack Developer" }}</p>
+
+          <div class="profile-socials">
+            {% if profile.social_github %}
+            <a href="{{ profile.social_github }}" target="_blank" rel="noopener" aria-label="GitHub Profile" class="social-link">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.5 2 2 6.6 2 12.2c0 4.5 2.9 8.3 6.8 9.6.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.3-3.4-1.3-.4-1.1-1-1.4-1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.4 4.8-4.6 5 .3.3.6.9.6 1.8v2.6c0 .3.2.6.7.5 3.9-1.3 6.8-5.1 6.8-9.6C22 6.6 17.5 2 12 2Z"/>
+              </svg>
+            </a>
+            {% endif %}
+
+            {% if profile.social_linkedin %}
+            <a href="{{ profile.social_linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn Profile" class="social-link">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <rect x="3" y="3" width="18" height="18" rx="4" />
+                <rect x="6.3" y="9.7" width="2.4" height="8" fill="#fff" />
+                <circle cx="7.5" cy="6.6" r="1.4" fill="#fff" />
+                <path d="M11.4 17.7V9.7h2.3v1.1c.5-.7 1.3-1.3 2.5-1.3 1.9 0 3.1 1.2 3.1 3.6v4.6h-2.4v-4.2c0-1.1-.4-1.8-1.4-1.8-.8 0-1.2.5-1.4 1-.1.2-.1.5-.1.8v4.2h-2.6Z" fill="#fff"/>
+              </svg>
+            </a>
+            {% endif %}
+
+            {% if profile.social_website %}
+            <a href="{{ profile.social_website }}" target="_blank" rel="noopener" aria-label="Website" class="social-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </a>
+            {% endif %}
+
+            {% if profile.social_whatsapp %}
+            <a href="{{ profile.social_whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp" class="social-link">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.04 2C6.5 2 2 6.48 2 12c0 1.77.46 3.43 1.34 4.91L2 22l5.22-1.37A9.94 9.94 0 0 0 12.04 22C17.56 22 22 17.52 22 12S17.56 2 12.04 2Zm0 18.2a8.18 8.18 0 0 1-4.17-1.14l-.3-.18-3.1.81.83-3.02-.2-.31A8.15 8.15 0 1 1 12.04 20.2Zm4.48-6.1c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.57.13-.17.25-.65.81-.8.98-.15.17-.3.19-.55.06-.25-.13-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.7-.14-.25-.02-.39.11-.52.12-.12.25-.3.38-.45.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.45.06-.69.32-.23.25-.9.88-.9 2.14s.92 2.48 1.05 2.65c.13.17 1.8 2.75 4.36 3.85.61.26 1.09.42 1.46.54.61.19 1.17.16 1.61.1.49-.07 1.48-.61 1.69-1.2.21-.59.21-1.1.15-1.2-.06-.11-.23-.17-.48-.3Z"/>
+              </svg>
+            </a>
+            {% endif %}
+
+            {% if profile.social_telegram %}
+            <a href="{{ profile.social_telegram }}" target="_blank" rel="noopener" aria-label="Telegram" class="social-link">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.37-.49 1.03-.75 4.04-1.76 6.74-2.92 8.09-3.48 3.85-1.6 4.64-1.89 5.17-1.89.11 0 .37.03.54.17.14.12.18.28.2.45-.01.07-.01.13-.02.21z"/>
+              </svg>
+            </a>
+            {% endif %}
+
+            {% if profile.social_youtube %}
+            <a href="{{ profile.social_youtube }}" target="_blank" rel="noopener" aria-label="YouTube" class="social-link">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-meta">
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <span>{{ profile.email|default:"email@example.com" }}</span>
+        </div>
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <span>Joined {{ profile.created|date:"M Y" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Profile Details Section -->
+<section class="section section--tint">
+  <div class="section-inner">
+    <div class="profile-grid">
+      <!-- Left Column: About & Skills -->
+      <div class="profile-main">
+        <!-- About Card -->
+        <article class="glass card reveal reveal-delay-1">
+          <div class="card__header">
+            <h2 class="card__title">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+              About Me
+            </h2>
+          </div>
+          <div class="card__body">
+            <p class="profile-bio">
+              {% if profile.bio %}
+                {{ profile.bio }}
+              {% else %}
+                This developer hasn't added a bio yet. Check back later for updates!
+              {% endif %}
+            </p>
+          </div>
+        </article>
+
+        <!-- Skills Card -->
+        {% if profile.skills.all %}
+        <article class="glass card reveal reveal-delay-2">
+          <div class="card__header">
+            <h2 class="card__title">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+              </svg>
+              Skills & Expertise
+            </h2>
+            <span class="badge">{{ profile.skills.all.count }} Skills</span>
+          </div>
+          <div class="card__body">
+            <div class="skills-grid">
+              {% for skill in profile.skills.all %}
+              <div class="skill-card reveal reveal-delay-{{ forloop.counter|divisibleby:3|yesno:'1,2,3' }}">
+                <div class="skill-card__icon">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                </div>
+                <div class="skill-card__content">
+                  <h3 class="skill-card__name">{{ skill.name }}</h3>
+                  {% if skill.description %}
+                  <p class="skill-card__desc">{{ skill.description|truncatechars:80 }}</p>
+                  {% endif %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </article>
+        {% endif %}
+      </div>
+
+      <!-- Right Column: Stats & Contact -->
+      <aside class="profile-sidebar">
+        <!-- Quick Contact Card -->
+        <article class="glass card reveal reveal-delay-1">
+          <div class="card__header">
+            <h2 class="card__title">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              Get In Touch
+            </h2>
+          </div>
+          <div class="card__body">
+            <p class="contact-text">Interested in collaborating? Reach out through any of these channels:</p>
+
+            <div class="contact-actions">
+              {% if profile.social_github %}
+              <a href="{{ profile.social_github }}" target="_blank" class="btn btn--outline btn--block">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M12 2C6.5 2 2 6.6 2 12.2c0 4.5 2.9 8.3 6.8 9.6.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.3-3.4-1.3-.4-1.1-1-1.4-1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.4 4.8-4.6 5 .3.3.6.9.6 1.8v2.6c0 .3.2.6.7.5 3.9-1.3 6.8-5.1 6.8-9.6C22 6.6 17.5 2 12 2Z"/>
+                </svg>
+                GitHub
+              </a>
+              {% endif %}
+
+              {% if profile.social_linkedin %}
+              <a href="{{ profile.social_linkedin }}" target="_blank" class="btn btn--outline btn--block">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <rect x="3" y="3" width="18" height="18" rx="4" />
+                  <rect x="6.3" y="9.7" width="2.4" height="8" fill="var(--color-bg)" />
+                  <circle cx="7.5" cy="6.6" r="1.4" fill="var(--color-bg)" />
+                  <path d="M11.4 17.7V9.7h2.3v1.1c.5-.7 1.3-1.3 2.5-1.3 1.9 0 3.1 1.2 3.1 3.6v4.6h-2.4v-4.2c0-1.1-.4-1.8-1.4-1.8-.8 0-1.2.5-1.4 1-.1.2-.1.5-.1.8v4.2h-2.6Z" fill="var(--color-bg)"/>
+                </svg>
+                LinkedIn
+              </a>
+              {% endif %}
+
+              {% if profile.social_whatsapp %}
+              <a href="{{ profile.social_whatsapp }}" target="_blank" class="btn btn--outline btn--block">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M12.04 2C6.5 2 2 6.48 2 12c0 1.77.46 3.43 1.34 4.91L2 22l5.22-1.37A9.94 9.94 0 0 0 12.04 22C17.56 22 22 17.52 22 12S17.56 2 12.04 2Zm0 18.2a8.18 8.18 0 0 1-4.17-1.14l-.3-.18-3.1.81.83-3.02-.2-.31A8.15 8.15 0 1 1 12.04 20.2Zm4.48-6.1c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.57.13-.17.25-.65.81-.8.98-.15.17-.3.19-.55.06-.25-.13-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.7-.14-.25-.02-.39.11-.52.12-.12.25-.3.38-.45.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.45.06-.69.32-.23.25-.9.88-.9 2.14s.92 2.48 1.05 2.65c.13.17 1.8 2.75 4.36 3.85.61.26 1.09.42 1.46.54.61.19 1.17.16 1.61.1.49-.07 1.48-.61 1.69-1.2.21-.59.21-1.1.15-1.2-.06-.11-.23-.17-.48-.3Z"/>
+                </svg>
+                WhatsApp
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+
+        <!-- Stats Card -->
+        <article class="glass card reveal reveal-delay-2">
+          <div class="card__header">
+            <h2 class="card__title">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+              Profile Stats
+            </h2>
+          </div>
+          <div class="card__body">
+            <div class="stats-vertical">
+              <div class="stat-vertical">
+                <span class="stat-vertical__value">{{ profile.skills.all.count }}</span>
+                <span class="stat-vertical__label">Skills</span>
+              </div>
+              <div class="stat-vertical">
+                <span class="stat-vertical__value">{{ profile.social_github|yesno:"1,0"|add:profile.social_linkedin|yesno:"1,0"|add:profile.social_website|yesno:"1,0" }}</span>
+                <span class="stat-vertical__label">Social Links</span>
+              </div>
+              <div class="stat-vertical">
+                <span class="stat-vertical__value">{{ profile.created|timesince }}</span>
+                <span class="stat-vertical__label">Member Since</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Availability Card -->
+        <article class="glass card availability-card reveal reveal-delay-3">
+          <div class="card__body">
+            <div class="availability-badge {% if profile.bio %}is-available{% endif %}">
+              <div class="availability-indicator"></div>
+              <div class="availability-text">
+                <strong>{% if profile.bio %}Available for Work{% else %}Status Unknown{% endif %}</strong>
+                <p>{% if profile.bio %}Open to new opportunities and collaborations{% else %}Update bio to show availability{% endif %}</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}
