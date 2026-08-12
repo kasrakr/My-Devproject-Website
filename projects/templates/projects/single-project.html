@@ -6,118 +6,258 @@
 {% block content %}
 
 
-<section class="page-head">
-  <div
-    class="blob"
-    style="
-      width: 360px;
-      height: 360px;
-      top: -140px;
-      right: -100px;
-      background: radial-gradient(
-        circle,
-        rgba(59, 130, 246, 0.14),
-        transparent 70%
-      );
-    "
-  ></div>
-  <div class="section-inner" style="position: relative; z-index: 1">
-    <a href="{% url 'projects' %}" class="back-link">
-      <svg viewBox="0 0 24 24"><path d="M15 6 9 12l6 6" /></svg>
-      Back to projects
-    </a>
-    <p class="eyebrow reveal">Project</p>
-    <h1 class="page-head__title reveal">{{ projectlist.title }}</h1>
-    <p class="page-head__subtitle reveal">
-      {% if projectlist.created_at %}Added {{ projectlist.created_at|date:"F j, Y" }}{% endif %}{% if projectlist.owner %}
-       by <a href="{% url 'userProfile' projectlist.owner.id %}" class="project-card__votes">
-        {{ projectlist.owner }}
-    </a>{% endif %}
-    </p>
-  </div>
-</section>
+<!-- Cinematic Project Hero -->
+<section class="project-cinema" data-project-cinema>
+  <div class="project-cinema__ambient"></div>
+  <div class="project-cinema__grid"></div>
+  <div class="project-cinema__glow project-cinema__glow--one"></div>
+  <div class="project-cinema__glow project-cinema__glow--two"></div>
 
-<section class="section">
-  <div class="section-inner detail-layout">
-    <div class="detail-main">
-      <div class="detail-media glass reveal">
-        {% if projectlist.featured_image %}
-        <img
-          src="{{ projectlist.featured_image.url }}"
-          alt="{{ projectlist.title }} preview"
-        />
-        {% else %}
-        <img
-          src="https://placehold.co/960x540/3B82F6/ffffff?text={{ projectlist.title|urlencode }}"
-          alt="Placeholder preview for {{ projectlist.title }}"
-        />
+  <div class="section-inner">
+    <div class="project-cinema__topbar">
+      <a href="{% url 'projects' %}" class="back-link project-cinema__back">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 6 9 12l6 6" />
+        </svg>
+        Back to projects
+      </a>
+
+      <span class="project-cinema__status">
+        <span class="project-cinema__status-dot"></span>
+        Project showcase
+      </span>
+    </div>
+
+    <div class="project-cinema__layout">
+      <div class="project-cinema__copy">
+        <p class="project-cinema__eyebrow">Featured project</p>
+
+        <h1 class="project-cinema__title">
+          {{ projectlist.title }}
+        </h1>
+
+        {% if projectlist.owner %}
+        <a href="{% url 'userProfile' projectlist.owner.id %}" class="project-cinema__owner">
+          <span class="project-cinema__owner-dot"></span>
+          <span>Created by <strong>{{ projectlist.owner }}</strong></span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </a>
         {% endif %}
+
+        <p class="project-cinema__description">
+          {{ projectlist.description|truncatewords:42 }}
+        </p>
+
+        <div class="project-cinema__actions">
+          {% if projectlist.demo_link %}
+          <a href="{{ projectlist.demo_link }}"
+             class="btn btn--primary project-cinema__launch"
+             target="_blank"
+             rel="noopener">
+            <span>Launch live demo</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 17 17 7M8 7h9v9" />
+            </svg>
+          </a>
+          {% endif %}
+
+          {% if projectlist.source_link %}
+          <a href="{{ projectlist.source_link }}"
+             class="btn btn--ghost"
+             target="_blank"
+             rel="noopener">
+            <span>View source</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 12h16M13 5l7 7-7 7" />
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+
+        <div class="project-cinema__stats">
+          <div class="project-cinema__stat">
+            <span class="project-cinema__stat-value">{{ projectlist.vote_total|default:0 }}</span>
+            <span class="project-cinema__stat-label">Votes</span>
+          </div>
+
+          <div class="project-cinema__stat">
+            <span class="project-cinema__stat-value">{{ tags|length }}</span>
+            <span class="project-cinema__stat-label">Technologies</span>
+          </div>
+
+          {% if projectlist.created_at %}
+          <div class="project-cinema__stat project-cinema__stat--date">
+            <span class="project-cinema__stat-value">{{ projectlist.created_at|date:"M Y" }}</span>
+            <span class="project-cinema__stat-label">Published</span>
+          </div>
+          {% endif %}
+        </div>
       </div>
 
-      <div class="detail-body reveal reveal-delay-1">
-        <h2>About this project</h2>
-        <p>{{ projectlist.description|linebreaksbr }}</p>
+      <div class="project-cinema__stage" data-project-tilt>
+        <div class="project-cinema__orbit project-cinema__orbit--one"></div>
+        <div class="project-cinema__orbit project-cinema__orbit--two"></div>
+
+        <div class="project-cinema__frame">
+          <div class="project-cinema__frame-bar">
+            <span class="project-cinema__frame-title">project.preview</span>
+            <span class="project-cinema__frame-live">
+              <span></span>
+              live
+            </span>
+          </div>
+
+          <div class="project-cinema__image-wrap">
+            {% if projectlist.featured_image %}
+            <img
+              src="{{ projectlist.featured_image.url }}"
+              alt="{{ projectlist.title }} preview"
+              class="project-cinema__image"
+            />
+            {% else %}
+            <img
+              src="https://placehold.co/1200x760/0F172A/EFF6FF?text={{ projectlist.title|urlencode }}"
+              alt="Preview for {{ projectlist.title }}"
+              class="project-cinema__image"
+            />
+            {% endif %}
+
+            <div class="project-cinema__image-shine"></div>
+            <div class="project-cinema__scanline"></div>
+
+            <div class="project-cinema__badge project-cinema__badge--top">
+              <span class="project-cinema__badge-dot"></span>
+              Built to ship
+            </div>
+
+            <div class="project-cinema__badge project-cinema__badge--bottom">
+              {% if projectlist.created_at %}
+              {{ projectlist.created_at|date:"F j, Y" }}
+              {% else %}
+              Project preview
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        {% if tags %}
+        <div class="project-cinema__tag-cloud">
+          {% for tag in tags|slice:":6" %}
+          <a href="{% url 'projects' %}?tag={{ tag }}" class="project-cinema__tag">
+            #{{ tag }}
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
     </div>
 
-    <aside class="detail-info glass reveal reveal-delay-2">
-      <h3>Details</h3>
+    <div class="project-cinema__scroll">
+      <span>Explore project</span>
+      <span class="project-cinema__scroll-line"></span>
+    </div>
+  </div>
+</section>
 
-      {% if tags %}
-      <div class="detail-info__row">
-        <span class="detail-info__label">Tags</span>
-        <div class="tag-pills">
-          {% for tag in tags %}
-          <a href="{% url 'projects' %}?tag={{ tag }}" class="tag-pill"
-            >{{ tag }}</a
-          >
-          {% endfor %}
+<!-- Project details -->
+<section class="section project-story" id="project-details">
+  <div class="section-inner">
+    <div class="project-story__layout">
+      <div class="project-story__main">
+        <div class="project-story__heading reveal">
+          <p class="eyebrow">Inside the build</p>
+          <h2 class="section__title">About this project</h2>
+        </div>
+
+        <article class="project-story__description glass reveal reveal-delay-1">
+          <p>{{ projectlist.description|linebreaksbr }}</p>
+        </article>
+
+        <div class="project-story__media glass reveal reveal-delay-2">
+          {% if projectlist.featured_image %}
+          <img
+            src="{{ projectlist.featured_image.url }}"
+            alt="{{ projectlist.title }} full preview"
+            loading="lazy"
+          />
+          {% else %}
+          <img
+            src="https://placehold.co/1200x760/0F172A/EFF6FF?text={{ projectlist.title|urlencode }}"
+            alt="Preview for {{ projectlist.title }}"
+            loading="lazy"
+          />
+          {% endif %}
         </div>
       </div>
-      {% endif %} {% if projectlist.created_at %}
-      <div class="detail-info__row">
-        <span class="detail-info__label">Created</span>
-        <span class="detail-info__value"
-          >{{ projectlist.created_at|date:"M j, Y" }}</span
-        >
-      </div>
-      {% endif %}
 
-      <div class="detail-info__links">
-        {% if projectlist.source_link %}
-        <a
-          href="{{ projectlist.source_link }}"
-          class="btn btn--primary btn--block"
-          target="_blank"
-          rel="noopener"
-          >View Source</a
-        >
-        {% endif %} {% if projectlist.demo_link %}
-        <a
-          href="{{ projectlist.demo_link }}"
-          class="btn btn--ghost btn--block"
-          target="_blank"
-          rel="noopener"
-          >Live Demo</a
-        >
-        {% endif %}
-      </div>
+      <aside class="project-story__aside">
+        <article class="project-info-panel glass reveal reveal-delay-2">
+          <div class="project-info-panel__head">
+            <span class="project-info-panel__kicker">Project data</span>
+            <span class="project-info-panel__pulse"></span>
+          </div>
 
-      {% if request.user.is_authenticated %}
-      <div class="detail-info__manage">
-        <a
-          href="{% url 'update-project' projectlist.id %}"
-          class="btn btn--ghost btn--block btn--sm"
-          >Edit Project</a
-        >
-        <a
-          href="{% url 'delete-project' projectlist.id %}"
-          class="btn btn--danger btn--block btn--sm"
-          >Delete Project</a
-        >
-      </div>
-      {% endif %}
-    </aside>
+          {% if tags %}
+          <div class="project-info-panel__section">
+            <span class="project-info-panel__label">Technologies</span>
+            <div class="tag-pills project-info-panel__tags">
+              {% for tag in tags %}
+              <a href="{% url 'projects' %}?tag={{ tag }}" class="tag-pill">{{ tag }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if projectlist.created_at %}
+          <div class="project-info-panel__section project-info-panel__section--line">
+            <span class="project-info-panel__label">Created</span>
+            <span class="project-info-panel__value">{{ projectlist.created_at|date:"F j, Y" }}</span>
+          </div>
+          {% endif %}
+
+          <div class="project-info-panel__links">
+            {% if projectlist.demo_link %}
+            <a href="{{ projectlist.demo_link }}"
+               class="btn btn--primary btn--block"
+               target="_blank"
+               rel="noopener">
+              Open live demo
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 17 17 7M8 7h9v9" />
+              </svg>
+            </a>
+            {% endif %}
+
+            {% if projectlist.source_link %}
+            <a href="{{ projectlist.source_link }}"
+               class="btn btn--ghost btn--block"
+               target="_blank"
+               rel="noopener">
+              View source
+            </a>
+            {% endif %}
+          </div>
+
+          {% if request.user.is_authenticated %}
+          <div class="detail-info__manage project-info-panel__manage">
+            <a href="{% url 'update-project' projectlist.id %}" class="btn btn--ghost btn--block btn--sm">
+              Edit Project
+            </a>
+            <a href="{% url 'delete-project' projectlist.id %}" class="btn btn--danger btn--block btn--sm">
+              Delete Project
+            </a>
+          </div>
+          {% endif %}
+        </article>
+
+        <div class="project-story__quote reveal reveal-delay-3">
+          <span class="project-story__quote-mark">“</span>
+          <p>Ideas become interesting when they become something people can actually use.</p>
+        </div>
+      </aside>
+    </div>
   </div>
 </section>
 
@@ -162,4 +302,57 @@
   </div>
 </section>
  {% endif %} 
+
+<script>
+(() => {
+  const scene = document.querySelector("[data-project-cinema]");
+  const stage = document.querySelector("[data-project-tilt]");
+  const frame = stage ? stage.querySelector(".project-cinema__frame") : null;
+
+  if (!scene || !stage || !frame || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  const finePointer = window.matchMedia("(pointer: fine)");
+  if (!finePointer.matches) return;
+
+  let raf = null;
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+
+  const render = () => {
+    currentX += (targetX - currentX) * 0.1;
+    currentY += (targetY - currentY) * 0.1;
+
+    frame.style.setProperty("--tilt-x", `${currentY * -1}deg`);
+    frame.style.setProperty("--tilt-y", `${currentX}deg`);
+
+    if (Math.abs(targetX - currentX) > 0.01 || Math.abs(targetY - currentY) > 0.01) {
+      raf = requestAnimationFrame(render);
+    } else {
+      raf = null;
+    }
+  };
+
+  stage.addEventListener("pointermove", (event) => {
+    const rect = stage.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) - 0.5;
+    const y = ((event.clientY - rect.top) / rect.height) - 0.5;
+
+    targetX = x * 5;
+    targetY = y * 4;
+
+    if (!raf) raf = requestAnimationFrame(render);
+  });
+
+  stage.addEventListener("pointerleave", () => {
+    targetX = 0;
+    targetY = 0;
+    if (!raf) raf = requestAnimationFrame(render);
+  });
+})();
+</script>
+
 {% endblock content %}

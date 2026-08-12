@@ -3,81 +3,114 @@
 
 {% block content%}
 <!-- Hero Section -->
-<section class="hero developers-hero">
+<section class="hero developers-hero developers-hero--network">
   <div class="hero__canvas">
-    <!-- Decorative blobs -->
-    <div class="blob" style="top: -10%; right: -5%; width: 420px; height: 420px; background: rgba(59, 130, 246, 0.12);"></div>
-    <div class="blob" style="bottom: 10%; left: -8%; width: 380px; height: 380px; background: rgba(37, 99, 235, 0.10);"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-glow hero-glow--one"></div>
+    <div class="hero-glow hero-glow--two"></div>
+    <div class="hero-orbit hero-orbit--one"></div>
+    <div class="hero-orbit hero-orbit--two"></div>
+    <span class="hero-particle hero-particle--1"></span>
+    <span class="hero-particle hero-particle--2"></span>
+    <span class="hero-particle hero-particle--3"></span>
+    <span class="hero-particle hero-particle--4"></span>
+    <span class="hero-particle hero-particle--5"></span>
   </div>
 
   <div class="section-inner">
     <div class="hero__inner">
-      <div class="hero__content">
-        <span class="eyebrow">👋 Meet Our Talent</span>
-        <h1 class="hero__title">
-          Discover <span class="text-gradient">Amazing Developers</span> Ready to Build
+      <div class="hero__content developers-hero__content">
+        <div class="hero-live-pill">
+          <span class="hero-live-dot"></span>
+          <span>Developer network is live</span>
+          <span class="hero-live-count">{{ profiles.count }}+ online</span>
+        </div>
+
+        <h1 class="hero__title developers-hero__title">
+          Meet the people
+          <span class="hero-title-line">behind the <span class="text-gradient hero-gradient-animated">code.</span></span>
         </h1>
-        <p class="hero__subtitle">
-          Connect with skilled professionals passionate about creating innovative solutions.
-          From full-stack engineers to UI/UX specialists – find your perfect collaborator.
+
+        <p class="hero__subtitle developers-hero__subtitle">
+          Discover developers, designers and builders with the skills to turn
+          <strong>ideas into real products.</strong>
         </p>
 
         <div class="hero__actions">
-          <a href="#developers" class="btn btn--primary">
+          <a href="#developers" class="btn btn--primary hero-main-btn">
+            <span>Explore developers</span>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              <path d="M5 12h14"/>
+              <path d="m13 6 6 6-6 6"/>
             </svg>
-            Browse Developers
           </a>
-          <a href="{% url 'projects' %}" class="btn btn--ghost">
-            Back to Home
+          <a href="{% url 'projects' %}" class="btn btn--ghost hero-secondary-btn">
+            See what they're building
           </a>
         </div>
 
-        <div class="hero__stats">
-          <div class="stat-chip">
+        <div class="hero__stats hero-network-stats">
+          <div class="stat-chip glass hero-stat">
             <span class="stat-chip__value">{{ profiles.count }}+</span>
             <span class="stat-chip__label">Developers</span>
           </div>
-          <div class="stat-chip">
-            <span class="stat-chip__value">Global</span>
-            <span class="stat-chip__label">Reach</span>
+          <div class="stat-chip glass hero-stat">
+            <span class="stat-chip__value">∞</span>
+            <span class="stat-chip__label">Possibilities</span>
           </div>
-          <div class="stat-chip">
-            <span class="stat-chip__value">100%</span>
-            <span class="stat-chip__label">Verified</span>
+          <div class="stat-chip glass hero-stat">
+            <span class="stat-chip__value">24/7</span>
+            <span class="stat-chip__label">Builders</span>
           </div>
         </div>
       </div>
 
-      <div class="hero__visual">
-        <div class="code-window">
-          <div class="code-header">
-            <div class="window-dots">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <span class="code-file">developers.py</span>
+      <div class="hero__visual developers-network">
+        <div class="network-ring network-ring--outer"></div>
+        <div class="network-ring network-ring--inner"></div>
+        <div class="network-line network-line--a"></div>
+        <div class="network-line network-line--b"></div>
+        <div class="network-line network-line--c"></div>
+
+        <div class="network-center">
+          <div class="network-center__shine"></div>
+          <div class="network-center__icon">&lt;/&gt;</div>
+          <strong>DevProject</strong>
+          <span>build together</span>
+          <div class="network-center__status">
+            <span></span> Connected
           </div>
-          <div class="code-body">
-            <div class="line"><span class="kw">class</span> <span class="cls">Developer</span>:</div>
-            <div class="line">  <span class="kw">def</span> <span class="fn">__init__</span>(self):</div>
-            <div class="line">    self.skills = [<span class="str">"Python"</span>, <span class="str">"Django"</span>, <span class="str">"React"</span>]</div>
-            <div class="line">    self.passion = <span class="str">"Building Amazing Products"</span></div>
-            <div class="line">    self.available = <span class="bool">True</span></div>
-            <div class="line">  </div>
-            <div class="line">  <span class="kw">def</span> <span class="fn">collaborate</span>(self):</div>
-            <div class="line">    <span class="kw">return</span> <span class="str">"Let's create something great!"</span></div>
-            <div class="line"></div>
-          </div>
-          <div class="code-result show">
-            <span class="prompt">&gt;&gt;&gt;</span>
-            <span class="output">Developer instance ready for collaboration!</span>
-          </div>
+        </div>
+
+        {% for profile in profiles|slice:":4" %}
+          <a href="{% url 'userProfile' profile.id %}" class="network-profile network-profile--{{ forloop.counter }}" aria-label="View {{ profile.name|default:profile.username }}">
+            <span class="network-profile__halo"></span>
+            <span class="network-profile__avatar">
+              {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="{{ profile.name|default:profile.username }}">
+              {% else %}
+                <span>{{ profile.name|default:profile.username|slice:":1"|upper }}</span>
+              {% endif %}
+            </span>
+            <span class="network-profile__label">{{ profile.name|default:profile.username }}</span>
+          </a>
+        {% empty %}
+          <div class="network-profile network-profile--1 network-profile--placeholder"><span class="network-profile__avatar">&lt;/&gt;</span></div>
+          <div class="network-profile network-profile--2 network-profile--placeholder"><span class="network-profile__avatar">PY</span></div>
+          <div class="network-profile network-profile--3 network-profile--placeholder"><span class="network-profile__avatar">JS</span></div>
+          <div class="network-profile network-profile--4 network-profile--placeholder"><span class="network-profile__avatar">UI</span></div>
+        {% endfor %}
+
+        <div class="tech-float tech-float--python">Python</div>
+        <div class="tech-float tech-float--django">Django</div>
+        <div class="tech-float tech-float--react">React</div>
+        <div class="tech-float tech-float--figma">UI/UX</div>
+
+        <div class="network-badge network-badge--top">
+          <span class="badge-ping"></span> Open to collaborate
+        </div>
+        <div class="network-badge network-badge--bottom">
+          <span class="badge-code">{ }</span>  Build. Ship. Repeat.
         </div>
       </div>
     </div>
