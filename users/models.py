@@ -2,6 +2,8 @@ from django.db import models
 import uuid
 # we add this built-in models for controling users
 from django.contrib.auth.models import User
+
+
 # Create your models here.
 
 
@@ -24,7 +26,7 @@ class profile(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     def __str__(self):
-        return str(self.user.username)
+        return str(self.username)
 
 
 class Skill(models.Model):
