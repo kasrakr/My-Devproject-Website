@@ -37,6 +37,20 @@ input, textarea { font: inherit; color: inherit; }
   --color-bg-tint: #F5F8FF;
   --color-line: rgba(15, 23, 42, 0.08);
 
+  /* Semantic (Django messages: debug / info / success / warning / error) */
+  --color-success: #16A34A;
+  --color-success-bg: #ECFDF5;
+  --color-success-border: #86EFAC;
+  --color-error: #DC2626;
+  --color-error-bg: #FEF2F2;
+  --color-error-border: #FCA5A5;
+  --color-warning: #B45309;
+  --color-warning-bg: #FFFBEB;
+  --color-warning-border: #FDE68A;
+  --color-info: var(--color-primary-600);
+  --color-info-bg: var(--color-primary-50);
+  --color-info-border: var(--color-primary-100);
+
   --glass-bg: rgba(255, 255, 255, 0.58);
   --glass-bg-strong: rgba(255, 255, 255, 0.78);
   --glass-border: rgba(255, 255, 255, 0.75);
@@ -196,6 +210,54 @@ textarea:focus-visible {
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   box-shadow: var(--glass-shadow);
   border-radius: var(--radius-lg);
+}
+
+/* ==========================================================================
+   5b. DJANGO MESSAGES
+   ========================================================================== */
+.messages {
+  max-width: var(--container-w);
+  margin: 1.5rem auto 0;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.messages li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-line);
+  border-left-width: 4px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: var(--glass-shadow);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-ink-soft);
+  animation: messageIn 0.35s var(--ease);
+}
+.messages li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  margin-top: 0.45rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.messages li.success { background: var(--color-success-bg); border-color: var(--color-success-border); color: var(--color-success); }
+.messages li.error   { background: var(--color-error-bg);   border-color: var(--color-error-border);   color: var(--color-error); }
+.messages li.warning { background: var(--color-warning-bg); border-color: var(--color-warning-border); color: var(--color-warning); }
+.messages li.info    { background: var(--color-info-bg);    border-color: var(--color-info-border);    color: var(--color-info); }
+.messages li.debug   { background: var(--color-bg-tint);    border-color: var(--color-line);           color: var(--color-muted); }
+
+@keyframes messageIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ==========================================================================
@@ -884,38 +946,7 @@ textarea:focus-visible {
 @media (max-width: 900px) { .stack-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .stack-grid { grid-template-columns: 1fr; } }
 
-/* ==========================================================================
-   12. WORKFLOW
-   ========================================================================== */
-.workflow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.75rem;
-  counter-reset: step;
-  position: relative;
-}
-.workflow__step {
-  padding: 2rem 1.7rem;
-  border-radius: var(--radius-lg);
-  position: relative;
-}
-.workflow__num {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--color-primary-600);
-  background: var(--color-primary-50);
-  border: 1px solid var(--color-primary-100);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  margin-bottom: 1.1rem;
-  font-weight: 600;
-}
-.workflow__step h3 { font-size: 1.08rem; margin-bottom: 0.5rem; }
-.workflow__step p { font-size: 0.93rem; }
-@media (max-width: 900px) { .workflow { grid-template-columns: 1fr; } }
+
 
 /* ==========================================================================
    13. PREVIEW
