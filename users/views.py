@@ -1,13 +1,45 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth import login, authenticate,logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from .models import profile
 # Create your views here.
+
+
+def loginUser(request):
+
+    if request.user.is_authenticated:
+        return redirect('profiles')
+
+
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        try:
+            user = User.objects.get(username=username)
+        except:
+            print("username does not exist")
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request,user)
+            return redirect('profiles')
+        else:
+            print('username or password is incorrect')
+        
+    return render(request, 'users/login_register.html')
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
 
 
 def profiles(request):
     # prefetch_related loads all skills for all profiles in one extra query
     # (instead of one query per profile per .all()/.count() call in the
-    # template), and list() evaluates it exactly once so the template's
-    # |slice and |length don't trigger further queries either.
     profiles_list = list(profile.objects.prefetch_related('skills'))
     context = {
         'profiles': profiles_list,
@@ -48,3 +80,5 @@ def userProfile(request, pk):
         'projects_count': projects_count
     }
     return render(request, 'users/userProfile.html', context)
+
+
