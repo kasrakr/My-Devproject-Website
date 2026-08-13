@@ -4,127 +4,6 @@
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// -----------------------------main sacript-------------------------------------------
-  document.addEventListener("DOMContentLoaded", () => {
-  const codeWindow = document.querySelector(".code-window");
-
-  if (!codeWindow) return;
-
-  const lines = codeWindow.querySelectorAll(".code-body .line");
-  const result = codeWindow.querySelector(".code-result");
-
-  // Store original content of every line
-  const originalContent = [];
-
-  lines.forEach((line) => {
-    originalContent.push(line.innerHTML);
-    line.innerHTML = "";
-    line.classList.remove("is-visible");
-  });
-
-  // Type text while preserving syntax-highlight spans
-  function typeNode(source, target, speed = 18) {
-    return new Promise((resolve) => {
-
-      // Text node
-      if (source.nodeType === Node.TEXT_NODE) {
-        const text = source.textContent;
-        let index = 0;
-
-        const typeCharacter = () => {
-          if (index < text.length) {
-            target.textContent += text[index];
-            index++;
-
-            setTimeout(typeCharacter, speed);
-          } else {
-            resolve();
-          }
-        };
-
-        typeCharacter();
-        return;
-      }
-
-      // Element node
-      if (source.nodeType === Node.ELEMENT_NODE) {
-        const newElement = source.cloneNode(false);
-        newElement.textContent = "";
-
-        target.appendChild(newElement);
-
-        const children = Array.from(source.childNodes);
-
-        const typeChildren = async () => {
-          for (const child of children) {
-            await typeNode(child, newElement, speed);
-          }
-
-          resolve();
-        };
-
-        typeChildren();
-      }
-    });
-  }
-
-  async function animateCode() {
-
-    // Small delay before starting
-    await new Promise(resolve =>
-      setTimeout(resolve, 500)
-    );
-
-    for (let i = 0; i < lines.length; i++) {
-
-      const line = lines[i];
-
-      line.classList.add("is-visible");
-
-      const temp = document.createElement("div");
-      temp.innerHTML = originalContent[i];
-
-      // Add cursor
-      const cursor = document.createElement("span");
-      cursor.className = "code-cursor";
-
-      line.appendChild(cursor);
-
-      const children = Array.from(temp.childNodes);
-
-      for (const child of children) {
-
-        const target = document.createDocumentFragment();
-
-        await typeNode(
-          child,
-          target,
-          i === 0 ? 15 : 12
-        );
-
-        cursor.before(target);
-      }
-
-      // Remove cursor from previous line
-      cursor.remove();
-
-      // Small pause between lines
-      await new Promise(resolve =>
-        setTimeout(resolve, 70)
-      );
-    }
-
-    // Wait before showing result
-    await new Promise(resolve =>
-      setTimeout(resolve, 400)
-    );
-
-    result.classList.add("show");
-  }
-
-  animateCode();
-});
-
   /* ---------------------------------------------------------------------
      Navigation: mobile toggle
   --------------------------------------------------------------------- */
@@ -580,5 +459,129 @@
       raf = requestAnimationFrame(render);
     }
   });
+})();
+
+/* ---------------------------------------------------------------------
+   Login / register: card tilt + companion cat
+   (used on the auth page, harmless elsewhere)
+--------------------------------------------------------------------- */
+(() => {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* --- gentle 3D tilt on the auth card, same lerp technique as the
+     project cinema frame above --- */
+  const stage = document.querySelector('[data-login-tilt]');
+  const frame = document.querySelector('[data-login-tilt-frame]');
+
+  if (stage && frame && !reducedMotion && window.matchMedia('(pointer: fine)').matches) {
+    let raf = null;
+    let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+
+    const render = () => {
+      currentX += (targetX - currentX) * 0.1;
+      currentY += (targetY - currentY) * 0.1;
+      frame.style.setProperty('--tilt-x', `${currentY * -1}deg`);
+      frame.style.setProperty('--tilt-y', `${currentX}deg`);
+      if (Math.abs(targetX - currentX) > 0.01 || Math.abs(targetY - currentY) > 0.01) {
+        raf = requestAnimationFrame(render);
+      } else {
+        raf = null;
+      }
+    };
+
+    stage.addEventListener('pointermove', (event) => {
+      const rect = stage.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) - 0.5;
+      const y = ((event.clientY - rect.top) / rect.height) - 0.5;
+      targetX = x * 4;
+      targetY = y * 3;
+      if (!raf) raf = requestAnimationFrame(render);
+    });
+
+    stage.addEventListener('pointerleave', () => {
+      targetX = 0;
+      targetY = 0;
+      if (!raf) raf = requestAnimationFrame(render);
+    });
+  }
+
+  /* --- companion cat: watches the cursor, hides its eyes for passwords --- */
+  const cat = document.querySelector('[data-login-cat]');
+  if (!cat) return;
+
+  const passwordInputs = Array.prototype.slice.call(document.querySelectorAll('input[type="password"]'));
+
+  function updateShy() {
+    const active = document.activeElement;
+    const shy = !!active && active.type === 'password' && passwordInputs.indexOf(active) !== -1;
+    cat.classList.toggle('is-shy', shy);
+  }
+  passwordInputs.forEach((input) => {
+    input.addEventListener('focus', updateShy);
+    input.addEventListener('blur', updateShy);
+  });
+
+  // Progressive enhancement: give every password field a show/hide toggle.
+  // If this fails to run for any reason, the plain password input still
+  // works fine — nothing here is required for the form to function.
+  passwordInputs.forEach((input) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'auth-password-wrap';
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'auth-password-toggle';
+    toggle.setAttribute('aria-label', 'Show password');
+    toggle.setAttribute('aria-pressed', 'false');
+    toggle.innerHTML =
+      '<svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>' +
+      '<svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a20.6 20.6 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a20.6 20.6 0 0 1-2.66 3.79M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></svg>';
+    wrap.appendChild(toggle);
+
+    toggle.addEventListener('click', () => {
+      const showing = input.type === 'text';
+      input.type = showing ? 'password' : 'text';
+      toggle.classList.toggle('is-visible', !showing);
+      toggle.setAttribute('aria-pressed', String(!showing));
+      toggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+      updateShy();
+      input.focus();
+    });
+  });
+
+  /* --- eyes follow the cursor anywhere on the page --- */
+  if (!reducedMotion) {
+    let raf2 = null;
+    let tx = 0, ty = 0, cx = 0, cy = 0;
+
+    const renderEyes = () => {
+      cx += (tx - cx) * 0.15;
+      cy += (ty - cy) * 0.15;
+      cat.style.setProperty('--eye-x', cx.toFixed(3));
+      cat.style.setProperty('--eye-y', cy.toFixed(3));
+      if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) {
+        raf2 = requestAnimationFrame(renderEyes);
+      } else {
+        raf2 = null;
+      }
+    };
+
+    window.addEventListener('pointermove', (event) => {
+      const rect = cat.getBoundingClientRect();
+      const ccx = rect.left + rect.width / 2;
+      const ccy = rect.top + rect.height / 2;
+      const dx = event.clientX - ccx;
+      const dy = event.clientY - ccy;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const reach = Math.min(dist, 280) / 280;
+      tx = (dx / dist) * reach;
+      ty = (dy / dist) * reach;
+      if (!raf2) raf2 = requestAnimationFrame(renderEyes);
+    }, { passive: true });
+  }
+
+  updateShy();
 })();
 })();

@@ -1,29 +1,139 @@
 {% extends 'main.html' %}
+
+{% block title %}{% if page == 'register' %}Create your account{% else %}Sign in{% endif %} · Devsearch{% endblock title %}
+
 {% block content %}
 
+<section class="auth-cinema" data-login-cinema>
+  <div class="auth-cinema__grid"></div>
+  <div class="auth-cinema__glow auth-cinema__glow--one"></div>
+  <div class="auth-cinema__glow auth-cinema__glow--two"></div>
+  <div class="auth-cinema__orbit"></div>
 
-{% if page == 'register' %}
-<h1>register page</h1>
-<form action="{% url 'register' %}" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Register User">
-</form>
+  <div class="auth-cinema__stage" data-login-tilt>
+    <div class="auth-card" data-login-tilt-frame>
 
-<p>Alredy have an account? <a href="{% url 'login' %}">Login</a></p>
+      <!-- Companion cat: purely decorative, watches the mouse and covers
+           its eyes while a password field is focused. -->
+      <div class="login-cat" data-login-cat aria-hidden="true">
+        <svg viewBox="0 0 200 190" xmlns="http://www.w3.org/2000/svg" role="img" focusable="false">
+          <defs>
+            <linearGradient id="catFur" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--cat-fur-light)"/>
+              <stop offset="100%" stop-color="var(--cat-fur)"/>
+            </linearGradient>
+          </defs>
 
+          <ellipse class="login-cat__shadow" cx="100" cy="184" rx="66" ry="8"/>
 
-{% else %}
-<form action="{% url 'login' %}" method="POST">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="Username">
-    <input type="password" name="password" placeholder="Password">
-    <input type="submit" value="Login">
+          <path class="login-cat__tail" d="M150,172 Q192,158 182,110 Q178,88 158,92" fill="none" stroke="url(#catFur)" stroke-width="16" stroke-linecap="round"/>
 
-    <p>Dont have an account? <a href="{% url 'register' %}">Create one.</a></p>
-</form>
-{% endif %}
+          <path class="login-cat__body" d="M52,190 L58,138 Q100,116 142,138 L148,190 Z" fill="url(#catFur)"/>
 
+          <g class="login-cat__ear login-cat__ear--left">
+            <path d="M50,52 L64,8 L86,46 Z" fill="url(#catFur)"/>
+            <path d="M56,46 L65,20 L78,42 Z" fill="var(--cat-inner-ear)"/>
+          </g>
+          <g class="login-cat__ear login-cat__ear--right">
+            <path d="M150,52 L136,8 L114,46 Z" fill="url(#catFur)"/>
+            <path d="M144,46 L135,20 L122,42 Z" fill="var(--cat-inner-ear)"/>
+          </g>
 
+          <g class="login-cat__head-group">
+            <circle cx="100" cy="90" r="56" fill="url(#catFur)"/>
 
+            <ellipse class="login-cat__blush" cx="66" cy="104" rx="10" ry="7"/>
+            <ellipse class="login-cat__blush" cx="134" cy="104" rx="10" ry="7"/>
+
+            <g class="login-cat__eyes">
+              <ellipse cx="79" cy="86" rx="13" ry="15" fill="#fff"/>
+              <circle class="login-cat__pupil" cx="79" cy="86" r="7" fill="var(--cat-eye-iris)"/>
+              <circle class="login-cat__pupil-shine" cx="76.5" cy="82.5" r="2" fill="#fff"/>
+
+              <ellipse cx="121" cy="86" rx="13" ry="15" fill="#fff"/>
+              <circle class="login-cat__pupil" cx="121" cy="86" r="7" fill="var(--cat-eye-iris)"/>
+              <circle class="login-cat__pupil-shine" cx="118.5" cy="82.5" r="2" fill="#fff"/>
+            </g>
+
+            <path d="M66,73 Q79,66 92,73" fill="none" stroke="var(--cat-line)" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M108,73 Q121,66 134,73" fill="none" stroke="var(--cat-line)" stroke-width="2.4" stroke-linecap="round"/>
+
+            <path d="M94,100 L106,100 L100,108 Z" fill="var(--cat-nose)"/>
+            <path d="M100,108 Q100,114 91,116 M100,108 Q100,114 109,116" fill="none" stroke="var(--cat-line)" stroke-width="2.2" stroke-linecap="round"/>
+
+            <g class="login-cat__whiskers" stroke-width="1.6" stroke-linecap="round" opacity=".55">
+              <path d="M58,96 L18,90"/>
+              <path d="M58,103 L16,103"/>
+              <path d="M58,110 L18,117"/>
+              <path d="M142,96 L182,90"/>
+              <path d="M142,103 L184,103"/>
+              <path d="M142,110 L182,117"/>
+            </g>
+          </g>
+
+          <g class="login-cat__paw login-cat__paw--left">
+            <ellipse cx="72" cy="168" rx="19" ry="15" fill="url(#catFur)"/>
+            <path d="M62,166 Q72,172 82,166" fill="none" stroke="var(--cat-fur-dark)" stroke-width="1.6" opacity=".6"/>
+          </g>
+          <g class="login-cat__paw login-cat__paw--right">
+            <ellipse cx="128" cy="168" rx="19" ry="15" fill="url(#catFur)"/>
+            <path d="M118,166 Q128,172 138,166" fill="none" stroke="var(--cat-fur-dark)" stroke-width="1.6" opacity=".6"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="auth-card__inner">
+        <span class="eyebrow auth-eyebrow">
+          {% if page == 'register' %}◆ Join the network{% else %}◆ Welcome back{% endif %}
+        </span>
+        <h1 class="auth-card__title">
+          {% if page == 'register' %}Create your account{% else %}Sign in to continue{% endif %}
+        </h1>
+        <p class="auth-card__lede">
+          {% if page == 'register' %}
+            Set up your developer profile and start showcasing what you build.
+          {% else %}
+            Good to see you again — your projects are waiting.
+          {% endif %}
+        </p>
+
+        <div class="auth-switch" role="tablist" aria-label="Choose sign in or register">
+          <a href="{% url 'login' %}" class="auth-switch__option {% if page != 'register' %}is-active{% endif %}" role="tab" aria-selected="{% if page != 'register' %}true{% else %}false{% endif %}">Sign In</a>
+          <a href="{% url 'register' %}" class="auth-switch__option {% if page == 'register' %}is-active{% endif %}" role="tab" aria-selected="{% if page == 'register' %}true{% else %}false{% endif %}">Register</a>
+        </div>
+
+        {% if page == 'register' %}
+        <form action="{% url 'register' %}" method="POST" class="auth-form">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn--primary auth-submit">
+            <span>Create account</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+            </svg>
+          </button>
+        </form>
+        {% else %}
+        <form action="{% url 'login' %}" method="POST" class="auth-form">
+          {% csrf_token %}
+          <p>
+            <label for="loginUsername">Username</label>
+            <input type="text" id="loginUsername" name="username" placeholder="e.g. ada_lovelace" autocomplete="username" required>
+          </p>
+          <p>
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" name="password" placeholder="••••••••" autocomplete="current-password" required>
+          </p>
+          <button type="submit" class="btn btn--primary auth-submit">
+            <span>Sign in</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+            </svg>
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock%}

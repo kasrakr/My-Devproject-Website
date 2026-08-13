@@ -4115,3 +4115,310 @@ a.tag-pill:hover {
     transition: none !important;
   }
 }
+
+/* ==========================================================================
+   AUTH CINEMA — login / register scene + companion cat
+   Page-scoped (mirrors the pattern used on userProfile.html): the shared
+   look lives in main.css, this one-off cinematic treatment lives here.
+   ========================================================================== */
+.auth-cinema {
+  position: relative;
+  min-height: calc(100vh - var(--nav-h));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6.5rem 1.5rem 4rem;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 80% 12%, rgba(59,130,246,.14), transparent 30%),
+    radial-gradient(circle at 10% 88%, rgba(37,99,235,.10), transparent 32%),
+    linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+}
+
+.auth-cinema__grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: .5;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(37,99,235,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at 50% 32%, rgba(0,0,0,.75), transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at 50% 32%, rgba(0,0,0,.75), transparent 70%);
+}
+
+.auth-cinema__glow {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(42px);
+  pointer-events: none;
+}
+.auth-cinema__glow--one { width: 260px; height: 260px; left: 8%; top: 16%; background: rgba(59,130,246,.14); animation: authGlowDrift 9s ease-in-out infinite; }
+.auth-cinema__glow--two { width: 320px; height: 320px; right: 6%; bottom: 8%; background: rgba(99,102,241,.11); animation: authGlowDrift 11s ease-in-out infinite reverse; }
+@keyframes authGlowDrift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(22px, -16px); }
+}
+
+.auth-cinema__orbit {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 44%;
+  width: min(680px, 92vw);
+  aspect-ratio: 1;
+  border: 1px solid rgba(59,130,246,.14);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(68deg);
+  animation: authOrbitSpin 32s linear infinite;
+  pointer-events: none;
+}
+@keyframes authOrbitSpin {
+  from { transform: translate(-50%, -50%) rotateX(68deg) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotateX(68deg) rotate(360deg); }
+}
+
+.auth-cinema__stage {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  perspective: 1400px;
+}
+
+.auth-card {
+  position: relative;
+  width: min(440px, 100%);
+  margin-top: 86px; /* room for the cat perched above */
+  overflow: visible;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,.85);
+  background: rgba(255,255,255,.72);
+  box-shadow:
+    0 40px 90px rgba(15,23,42,.16),
+    0 16px 34px rgba(37,99,235,.12),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  transform-style: preserve-3d;
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform .18s ease-out, box-shadow .3s var(--ease);
+}
+
+.auth-card__inner {
+  position: relative;
+  z-index: 2;
+  padding: 5.6rem 2.4rem 2.6rem;
+}
+
+.auth-eyebrow { margin-bottom: 1rem; }
+
+.auth-card__title {
+  font-size: clamp(1.5rem, 1.1rem + 1.4vw, 1.9rem);
+  margin-bottom: .5rem;
+}
+
+.auth-card__lede {
+  color: var(--color-muted);
+  font-size: .96rem;
+  margin-bottom: 0;
+}
+
+/* --- Sign in / Register segmented switch --- */
+.auth-switch {
+  display: flex;
+  gap: .3rem;
+  padding: .3rem;
+  margin: 1.6rem 0 1.7rem;
+  background: var(--color-bg-tint);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-full);
+}
+.auth-switch__option {
+  flex: 1;
+  text-align: center;
+  padding: .6rem 1rem;
+  border-radius: var(--radius-full);
+  font: 600 .88rem var(--font-body);
+  color: var(--color-muted);
+  transition: background .25s var(--ease), color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.auth-switch__option.is-active {
+  background: #fff;
+  color: var(--color-primary-600);
+  box-shadow: 0 6px 16px rgba(37,99,235,.16);
+}
+.auth-switch__option:hover:not(.is-active) { color: var(--color-ink); }
+
+/* --- Form fields (styles both the hand-written login form and Django's
+       auto-rendered {{ form.as_p }} register form identically) --- */
+.auth-form p { margin: 0 0 1.1rem; display: flex; flex-direction: column; gap: .4rem; }
+.auth-form label {
+  font: 600 .76rem var(--font-mono);
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  width: 100%;
+  padding: .85rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-line);
+  background: rgba(255,255,255,.7);
+  font: 500 .95rem var(--font-body);
+  color: var(--color-ink);
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+}
+.auth-form input::placeholder { color: #9aa7bd; }
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background: #fff;
+  box-shadow: 0 0 0 4px var(--color-primary-100);
+}
+.auth-form ul.errorlist {
+  list-style: none;
+  margin: .35rem 0 0;
+  padding: 0;
+  font: 600 .8rem var(--font-body);
+  color: var(--color-error);
+}
+.auth-form .helptext { font-size: .78rem; color: var(--color-muted); }
+
+.auth-password-wrap { position: relative; }
+.auth-password-wrap input { padding-right: 2.8rem; }
+.auth-password-toggle {
+  position: absolute;
+  right: .5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.15rem;
+  height: 2.15rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--color-muted);
+  transition: color .2s var(--ease), background .2s var(--ease);
+}
+.auth-password-toggle:hover { background: var(--color-primary-50); color: var(--color-primary-600); }
+.auth-password-toggle svg { width: 19px; height: 19px; }
+.auth-password-toggle .icon-eye-off { display: none; }
+.auth-password-toggle.is-visible .icon-eye { display: none; }
+.auth-password-toggle.is-visible .icon-eye-off { display: block; }
+
+.auth-submit { width: 100%; margin-top: .5rem; }
+.auth-submit svg { width: 18px; height: 18px; transition: transform .3s var(--ease); }
+.auth-submit:hover svg { transform: translateX(4px); }
+
+@media (max-width: 560px) {
+  .auth-card { margin-top: 70px; }
+  .auth-card__inner { padding: 4.6rem 1.6rem 2.2rem; }
+  .auth-cinema { padding: 4.5rem 1rem 3rem; }
+}
+
+/* ==========================================================================
+   THE CAT — watches the cursor, covers its eyes for passwords
+   ========================================================================== */
+.login-cat {
+  --cat-fur-light: #E9EEF7;
+  --cat-fur: #CBD5E1;
+  --cat-fur-dark: #94A3B8;
+  --cat-inner-ear: #FDA4AF;
+  --cat-nose: #FB7185;
+  --cat-blush: #FDA4AF;
+  --cat-eye-iris: var(--color-primary);
+  --cat-line: #475569;
+
+  position: absolute;
+  z-index: 4;
+  top: -92px;
+  left: 50%;
+  width: clamp(130px, 24vw, 176px);
+  transform: translateX(-50%) rotate(calc(var(--eye-x, 0) * 1.5deg));
+  transition: transform .5s var(--ease);
+  animation: catBob 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes catBob {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -5px; }
+}
+
+.login-cat__shadow {
+  fill: rgba(15, 23, 42, .14);
+  filter: blur(3px);
+}
+
+.login-cat__tail {
+  transform-box: view-box;
+  transform-origin: 150px 172px;
+  animation: catTailSway 3.6s ease-in-out infinite;
+}
+@keyframes catTailSway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-8deg); }
+}
+
+.login-cat__ear { transform-box: view-box; transition: transform .4s var(--ease); }
+.login-cat__ear--left  { transform-origin: 68px 46px; transform: rotate(calc(var(--eye-x, 0) * 3deg)); }
+.login-cat__ear--right { transform-origin: 132px 46px; transform: rotate(calc(var(--eye-x, 0) * 3deg)); }
+
+.login-cat__eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: catBlink 5.5s ease-in-out infinite;
+}
+@keyframes catBlink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(.1); }
+}
+
+.login-cat__pupil {
+  transform: translate(calc(var(--eye-x, 0) * 5px), calc(var(--eye-y, 0) * 4px));
+}
+.login-cat__pupil-shine {
+  transform: translate(calc(var(--eye-x, 0) * 5px), calc(var(--eye-y, 0) * 4px));
+}
+
+.login-cat__blush { fill: var(--cat-blush); opacity: .45; }
+
+.login-cat__whiskers { stroke: var(--cat-line); }
+
+.login-cat__paw {
+  transform-box: view-box;
+  transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.login-cat__paw--left  { transform-origin: 72px 178px; }
+.login-cat__paw--right { transform-origin: 128px 178px; }
+
+.login-cat.is-shy .login-cat__paw--left  { transform: translate(6px, -84px) rotate(-10deg); }
+.login-cat.is-shy .login-cat__paw--right { transform: translate(-6px, -84px) rotate(10deg); }
+.login-cat.is-shy .login-cat__ear--left  { transform: rotate(calc(var(--eye-x, 0) * 3deg)) scaleY(.85); }
+.login-cat.is-shy .login-cat__ear--right { transform: rotate(calc(var(--eye-x, 0) * 3deg)) scaleY(.85); }
+.login-cat.is-shy .login-cat__head-group { transform: translateY(3px); }
+
+.login-cat__head-group { transition: transform .4s var(--ease); }
+
+@media (max-width: 560px) {
+  .login-cat { top: -72px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-cat,
+  .login-cat__tail,
+  .login-cat__eyes,
+  .auth-cinema__glow,
+  .auth-cinema__orbit {
+    animation: none !important;
+  }
+  .login-cat__paw,
+  .auth-card {
+    transition: none !important;
+  }
+}
