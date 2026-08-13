@@ -346,4 +346,118 @@
     });
   });
 
+  /* ---------------------------------------------------------------------
+   User profile hero: pointer parallax
+   (used on the individual developer profile page, harmless elsewhere)
+--------------------------------------------------------------------- */
+(() => {
+  const hero = document.querySelector('[data-profile-hero]');
+  const signal = hero?.querySelector('[data-profile-parallax]');
+
+  if (
+    !hero ||
+    !signal ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ) {
+    return;
+  }
+
+  const layers = signal.querySelectorAll('[data-parallax-layer]');
+
+  signal.addEventListener('pointermove', (event) => {
+    const rect = signal.getBoundingClientRect();
+
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+    layers.forEach((layer) => {
+      const depth =
+        layer.dataset.parallaxLayer === 'core'
+          ? 18
+          : layer.dataset.parallaxLayer === 'code'
+            ? 28
+            : 34;
+
+      layer.style.setProperty('--px', `${x * depth}px`);
+      layer.style.setProperty('--py', `${y * depth}px`);
+    });
+  });
+
+  signal.addEventListener('pointerleave', () => {
+    layers.forEach((layer) => {
+      layer.style.setProperty('--px', '0px');
+      layer.style.setProperty('--py', '0px');
+    });
+  });
+})();
+
+/* ---------------------------------------------------------------------
+   Single project hero: pointer tilt
+   (used on the individual project page, harmless elsewhere)
+--------------------------------------------------------------------- */
+(() => {
+  const scene = document.querySelector("[data-project-cinema]");
+  const stage = document.querySelector("[data-project-tilt]");
+  const frame = stage
+    ? stage.querySelector(".project-cinema__frame")
+    : null;
+
+  if (
+    !scene ||
+    !stage ||
+    !frame ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    return;
+  }
+
+  const finePointer = window.matchMedia("(pointer: fine)");
+  if (!finePointer.matches) return;
+
+  let raf = null;
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+
+  const render = () => {
+    currentX += (targetX - currentX) * 0.1;
+    currentY += (targetY - currentY) * 0.1;
+
+    frame.style.setProperty("--tilt-x", `${currentY * -1}deg`);
+    frame.style.setProperty("--tilt-y", `${currentX}deg`);
+
+    if (
+      Math.abs(targetX - currentX) > 0.01 ||
+      Math.abs(targetY - currentY) > 0.01
+    ) {
+      raf = requestAnimationFrame(render);
+    } else {
+      raf = null;
+    }
+  };
+
+  stage.addEventListener("pointermove", (event) => {
+    const rect = stage.getBoundingClientRect();
+
+    const x = ((event.clientX - rect.left) / rect.width) - 0.5;
+    const y = ((event.clientY - rect.top) / rect.height) - 0.5;
+
+    targetX = x * 5;
+    targetY = y * 4;
+
+    if (!raf) {
+      raf = requestAnimationFrame(render);
+    }
+  });
+
+  stage.addEventListener("pointerleave", () => {
+    targetX = 0;
+    targetY = 0;
+
+    if (!raf) {
+      raf = requestAnimationFrame(render);
+    }
+  });
+})();
 })();

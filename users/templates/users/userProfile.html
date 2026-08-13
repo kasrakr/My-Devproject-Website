@@ -524,7 +524,7 @@
         <div class="profile-orbit profile-orbit--3"></div>
 
         <div class="profile-skill-cloud">
-          {% for skill in profile.skills.all|slice:":6" %}
+          {% for skill in skills|slice:":6" %}
             <span class="profile-skill-chip" style="--dur:{{ forloop.counter|add:3 }}s; --delay:-{{ forloop.counter }}s;">{{ skill.name }}</span>
           {% empty %}
             <span class="profile-skill-chip" style="--dur:5s;">Python</span>
@@ -536,7 +536,7 @@
 
         <div class="profile-core" data-parallax-layer="core">
           {% if profile.profile_image %}
-            <img class="profile-core__image" src="{{ profile.profile_image.url }}" alt="{{ profile.name|default:profile.username }}" />
+            <img class="profile-core__image" src="{{ profile.profile_image.url }}" alt="{{ profile.name|default:profile.username }}" width="290" height="290" fetchpriority="high" />
           {% else %}
             <div class="profile-core__placeholder">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -546,12 +546,12 @@
         </div>
 
         <span class="profile-float profile-float--top" data-parallax-layer="top"><span class="profile-float__dot"></span>{% if profile.bio %}Open to collaborate{% else %}Profile active{% endif %}</span>
-        <span class="profile-float profile-float--left" data-parallax-layer="left"><span class="profile-float__dot"></span>{{ profile.skills.all.count }} skills</span>
+        <span class="profile-float profile-float--left" data-parallax-layer="left"><span class="profile-float__dot"></span>{{ skills_count }} skills</span>
         <span class="profile-float profile-float--bottom" data-parallax-layer="bottom"><span class="profile-float__dot"></span>{{ projects_count }} projects</span>
 
         <div class="profile-code-card" data-parallax-layer="code">
           <span class="profile-code-line"><span class="profile-code-key">role</span>: <span class="profile-code-value">"{{ profile.short_intro|default:"Full Stack Developer"|truncatechars:26 }}"</span></span>
-          <span class="profile-code-line"><span class="profile-code-key">skills</span>: <span class="profile-code-value">{{ profile.skills.all.count }}</span></span>
+          <span class="profile-code-line"><span class="profile-code-key">skills</span>: <span class="profile-code-value">{{ skills_count }}</span></span>
           <span class="profile-code-line"><span class="profile-code-key">projects</span>: <span class="profile-code-value">{{ projects_count }}</span></span>
           <span class="profile-code-line"><span class="profile-code-key">status</span>: <span class="profile-code-value">"{% if profile.bio %}available{% else %}active{% endif %}"</span></span>
           <span class="profile-code-line profile-code-comment">// ready to build something great</span>
@@ -562,37 +562,6 @@
 
   <div class="profile-scroll">Scroll to explore</div>
 </section>
-
-<script>
-(() => {
-  const hero = document.querySelector('[data-profile-hero]');
-  const signal = hero?.querySelector('[data-profile-parallax]');
-  if (!hero || !signal || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const layers = signal.querySelectorAll('[data-parallax-layer]');
-
-  signal.addEventListener('pointermove', (event) => {
-    const rect = signal.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-
-    layers.forEach((layer) => {
-      const depth = layer.dataset.parallaxLayer === 'core' ? 18 :
-                    layer.dataset.parallaxLayer === 'code' ? 28 : 34;
-      layer.style.setProperty('--px', `${x * depth}px`);
-      layer.style.setProperty('--py', `${y * depth}px`);
-    });
-  });
-
-  signal.addEventListener('pointerleave', () => {
-    layers.forEach((layer) => {
-      layer.style.setProperty('--px', '0px');
-      layer.style.setProperty('--py', '0px');
-    });
-  });
-})();
-</script>
-
 <!-- Profile Details Section -->
 <section class="section section--tint" id="profile-details">
   <div class="section-inner">
@@ -625,7 +594,7 @@
         </article>
 
         <!-- Skills Card -->
-        {% if profile.skills.all %}
+        {% if skills %}
         <article class="glass card reveal reveal-delay-2">
           <div class="card__header">
             <h2 class="card__title">
@@ -636,11 +605,11 @@
               </svg>
               Skills & Expertise
             </h2>
-            <span class="badge">{{ profile.skills.all.count }} Skills</span>
+            <span class="badge">{{ skills_count }} Skills</span>
           </div>
           <div class="card__body">
             <div class="skills-grid">
-              {% for skill in profile.skills.all %}
+              {% for skill in skills %}
               <div class="skill-card reveal reveal-delay-{{ forloop.counter|divisibleby:3|yesno:'1,2,3' }}">
                 <div class="skill-card__icon">
                   <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
@@ -681,7 +650,7 @@
               <a href="{% url 'project' project.id %}" class="project-item reveal reveal-delay-{{ forloop.counter|divisibleby:3|yesno:'1,2,3' }}">
                 <div class="project-item__image">
                   {% if project.featured_image %}
-                    <img src="{{ project.featured_image.url }}" alt="{{ project.title }}" />
+                    <img src="{{ project.featured_image.url }}" alt="{{ project.title }}" width="80" height="80" loading="lazy" />
                   {% else %}
                     <div class="project-item__placeholder">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -702,16 +671,18 @@
                       </svg>
                       {{ project.vote_total|default:0 }}
                     </span>
-                    {% if project.tags.all %}
+                    {% with tags=project.tags.all %}
+                    {% if tags %}
                     <div class="project-item__tags">
-                      {% for tag in project.tags.all|slice:":2" %}
+                      {% for tag in tags|slice:":2" %}
                       <span class="tag tag--sm">{{ tag.name }}</span>
                       {% endfor %}
-                      {% if project.tags.all.count > 2 %}
-                      <span class="tag tag--sm tag--more">+{{ project.tags.all.count|add:"-2" }}</span>
+                      {% if tags|length > 2 %}
+                      <span class="tag tag--sm tag--more">+{{ tags|length|add:"-2" }}</span>
                       {% endif %}
                     </div>
                     {% endif %}
+                    {% endwith %}
                   </div>
                 </div>
               </a>
@@ -796,11 +767,11 @@
           <div class="card__body">
             <div class="stats-vertical">
               <div class="stat-vertical">
-                <span class="stat-vertical__value">{{ profile.skills.all.count }}</span>
+                <span class="stat-vertical__value">{{ skills_count }}</span>
                 <span class="stat-vertical__label">Skills</span>
               </div>
               <div class="stat-vertical">
-                <span class="stat-vertical__value">{{ profile.social_github|yesno:"1,0"|add:profile.social_linkedin|yesno:"1,0"|add:profile.social_website|yesno:"1,0" }}</span>
+                <span class="stat-vertical__value">{{ social_count }}</span>
                 <span class="stat-vertical__label">Social Links</span>
               </div>
               <div class="stat-vertical">

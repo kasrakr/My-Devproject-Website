@@ -23,7 +23,7 @@
         <div class="hero-live-pill">
           <span class="hero-live-dot"></span>
           <span>Developer network is live</span>
-          <span class="hero-live-count">{{ profiles.count }}+ online</span>
+          <span class="hero-live-count">{{ profiles_count }}+ online</span>
         </div>
 
         <h1 class="hero__title developers-hero__title">
@@ -51,7 +51,7 @@
 
         <div class="hero__stats hero-network-stats">
           <div class="stat-chip glass hero-stat">
-            <span class="stat-chip__value">{{ profiles.count }}+</span>
+            <span class="stat-chip__value">{{ profiles_count }}+</span>
             <span class="stat-chip__label">Developers</span>
           </div>
           <div class="stat-chip glass hero-stat">
@@ -87,7 +87,7 @@
             <span class="network-profile__halo"></span>
             <span class="network-profile__avatar">
               {% if profile.profile_image %}
-                <img src="{{ profile.profile_image.url }}" alt="{{ profile.name|default:profile.username }}">
+                <img src="{{ profile.profile_image.url }}" alt="{{ profile.name|default:profile.username }}" width="78" height="78">
               {% else %}
                 <span>{{ profile.name|default:profile.username|slice:":1"|upper }}</span>
               {% endif %}
@@ -136,7 +136,7 @@
         <div class="developer-card__header">
           <div class="developer-card__avatar">
             {% if profile.profile_image %}
-              <img src="{{ profile.profile_image.url }}" alt="{{ profile.name|default:profile.username }}" />
+              <img src="{{ profile.profile_image.url }}" alt="{{ profile.name|default:profile.username }}" width="100" height="100" loading="lazy" />
             {% else %}
               <div class="developer-card__avatar-placeholder">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -163,16 +163,18 @@
           </p>
           {% endif %}
 
-          {% if profile.skills.all %}
+          {% with skills=profile.skills.all %}
+          {% if skills %}
           <div class="developer-card__skills">
-            {% for skill in profile.skills.all|slice:":5" %}
+            {% for skill in skills|slice:":5" %}
             <span class="skill-tag">{{ skill.name }}</span>
             {% endfor %}
-            {% if profile.skills.all.count > 5 %}
-            <span class="skill-tag skill-tag--more">+{{ profile.skills.all.count|add:"-5" }}</span>
+            {% if skills|length > 5 %}
+            <span class="skill-tag skill-tag--more">+{{ skills|length|add:"-5" }}</span>
             {% endif %}
           </div>
           {% endif %}
+          {% endwith %}
 
           <div class="developer-card__socials">
             {% if profile.social_github %}
