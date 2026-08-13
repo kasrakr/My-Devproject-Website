@@ -4,6 +4,127 @@
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// -----------------------------main sacript-------------------------------------------
+  document.addEventListener("DOMContentLoaded", () => {
+  const codeWindow = document.querySelector(".code-window");
+
+  if (!codeWindow) return;
+
+  const lines = codeWindow.querySelectorAll(".code-body .line");
+  const result = codeWindow.querySelector(".code-result");
+
+  // Store original content of every line
+  const originalContent = [];
+
+  lines.forEach((line) => {
+    originalContent.push(line.innerHTML);
+    line.innerHTML = "";
+    line.classList.remove("is-visible");
+  });
+
+  // Type text while preserving syntax-highlight spans
+  function typeNode(source, target, speed = 18) {
+    return new Promise((resolve) => {
+
+      // Text node
+      if (source.nodeType === Node.TEXT_NODE) {
+        const text = source.textContent;
+        let index = 0;
+
+        const typeCharacter = () => {
+          if (index < text.length) {
+            target.textContent += text[index];
+            index++;
+
+            setTimeout(typeCharacter, speed);
+          } else {
+            resolve();
+          }
+        };
+
+        typeCharacter();
+        return;
+      }
+
+      // Element node
+      if (source.nodeType === Node.ELEMENT_NODE) {
+        const newElement = source.cloneNode(false);
+        newElement.textContent = "";
+
+        target.appendChild(newElement);
+
+        const children = Array.from(source.childNodes);
+
+        const typeChildren = async () => {
+          for (const child of children) {
+            await typeNode(child, newElement, speed);
+          }
+
+          resolve();
+        };
+
+        typeChildren();
+      }
+    });
+  }
+
+  async function animateCode() {
+
+    // Small delay before starting
+    await new Promise(resolve =>
+      setTimeout(resolve, 500)
+    );
+
+    for (let i = 0; i < lines.length; i++) {
+
+      const line = lines[i];
+
+      line.classList.add("is-visible");
+
+      const temp = document.createElement("div");
+      temp.innerHTML = originalContent[i];
+
+      // Add cursor
+      const cursor = document.createElement("span");
+      cursor.className = "code-cursor";
+
+      line.appendChild(cursor);
+
+      const children = Array.from(temp.childNodes);
+
+      for (const child of children) {
+
+        const target = document.createDocumentFragment();
+
+        await typeNode(
+          child,
+          target,
+          i === 0 ? 15 : 12
+        );
+
+        cursor.before(target);
+      }
+
+      // Remove cursor from previous line
+      cursor.remove();
+
+      // Small pause between lines
+      await new Promise(resolve =>
+        setTimeout(resolve, 70)
+      );
+    }
+
+    // Wait before showing result
+    await new Promise(resolve =>
+      setTimeout(resolve, 400)
+    );
+
+    result.classList.add("show");
+  }
+
+  animateCode();
+});
+
   /* ---------------------------------------------------------------------
      Navigation: mobile toggle
   --------------------------------------------------------------------- */
