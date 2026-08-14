@@ -551,21 +551,32 @@
     });
   });
 
-  /* --- eyes follow the cursor anywhere on the page --- */
+  /* --- eyes follow the cursor + background parallax, one shared loop
+     so we're not running two independent pointermove/rAF cycles --- */
+  const scene = document.querySelector('[data-login-cinema]');
+
   if (!reducedMotion) {
     let raf2 = null;
     let tx = 0, ty = 0, cx = 0, cy = 0;
+    let ptx = 0, pty = 0, pcx = 0, pcy = 0;
 
-    const renderEyes = () => {
+    const renderMotion = () => {
       cx += (tx - cx) * 0.15;
       cy += (ty - cy) * 0.15;
       cat.style.setProperty('--eye-x', cx.toFixed(3));
       cat.style.setProperty('--eye-y', cy.toFixed(3));
-      if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) {
-        raf2 = requestAnimationFrame(renderEyes);
-      } else {
-        raf2 = null;
+
+      if (scene) {
+        pcx += (ptx - pcx) * 0.06;
+        pcy += (pty - pcy) * 0.06;
+        scene.style.setProperty('--parallax-x', pcx.toFixed(3));
+        scene.style.setProperty('--parallax-y', pcy.toFixed(3));
       }
+
+      const settled =
+        Math.abs(tx - cx) < 0.001 && Math.abs(ty - cy) < 0.001 &&
+        Math.abs(ptx - pcx) < 0.001 && Math.abs(pty - pcy) < 0.001;
+      raf2 = settled ? null : requestAnimationFrame(renderMotion);
     };
 
     window.addEventListener('pointermove', (event) => {
@@ -578,10 +589,154 @@
       const reach = Math.min(dist, 280) / 280;
       tx = (dx / dist) * reach;
       ty = (dy / dist) * reach;
-      if (!raf2) raf2 = requestAnimationFrame(renderEyes);
+
+      if (scene) {
+        const srect = scene.getBoundingClientRect();
+        ptx = ((event.clientX - srect.left) / srect.width - 0.5) * 2;
+        pty = ((event.clientY - srect.top) / srect.height - 0.5) * 2;
+      }
+
+      if (!raf2) raf2 = requestAnimationFrame(renderMotion);
     }, { passive: true });
   }
 
+  /* --- focus vignette across the whole scene, plus a curious ear-perk
+     while the username field specifically has focus --- */
+  if (scene) {
+    const formInputs = Array.prototype.slice.call(scene.querySelectorAll('.auth-form input'));
+    formInputs.forEach((input) => {
+      input.addEventListener('focus', () => scene.classList.add('is-focused'));
+      input.addEventListener('blur', () => scene.classList.remove('is-focused'));
+    });
+
+    const usernameInputs = Array.prototype.slice.call(scene.querySelectorAll('input[name="username"]'));
+    usernameInputs.forEach((input) => {
+      input.addEventListener('focus', () => cat.classList.add('is-alert'));
+      input.addEventListener('blur', () => cat.classList.remove('is-alert'));
+    });
+  }
+
+  /* --- brief loading state on submit; this is a normal full-page POST,
+     but the button reacting immediately still makes it feel responsive --- */
+  document.querySelectorAll('.auth-form').forEach((form) => {
+    form.addEventListener('submit', () => {
+      const btn = form.querySelector('.auth-submit');
+      if (btn) btn.classList.add('is-loading');
+    });
+  });
+
   updateShy();
+})();
+
+/* ---------------------------------------------------------------------
+   Login scene: soft ambient particle field
+   (used on the auth page, harmless elsewhere; skipped under reduced
+   motion since it's pure atmosphere, not information)
+--------------------------------------------------------------------- */
+(() => {
+  const canvas = document.querySelector('[data-login-particles]');
+  const scene = document.querySelector('[data-login-cinema]');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!canvas || !scene || reducedMotion || !canvas.getContext) return;
+
+  const ctx = canvas.getContext('2d');
+  let width, height, dpr;
+  let particles = [];
+  const mouse = { x: null, y: null, radius: 110 };
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = scene.clientWidth;
+    height = scene.clientHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    initParticles();
+  }
+
+  function initParticles() {
+    const count = Math.min(46, Math.max(18, Math.floor((width * height) / 26000)));
+    particles = [];
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18,
+        r: Math.random() * 1.5 + 1
+      });
+    }
+  }
+
+  function step() {
+    ctx.clearRect(0, 0, width, height);
+    const linkDist = 120;
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0 || p.x > width) p.vx *= -1;
+      if (p.y < 0 || p.y > height) p.vy *= -1;
+
+      if (mouse.x !== null) {
+        const dxm = p.x - mouse.x, dym = p.y - mouse.y;
+        const distm = Math.sqrt(dxm * dxm + dym * dym);
+        if (distm < mouse.radius && distm > 0.01) {
+          const force = (mouse.radius - distm) / mouse.radius;
+          p.x += (dxm / distm) * force * 0.9;
+          p.y += (dym / distm) * force * 0.9;
+        }
+      }
+    }
+
+    for (let a = 0; a < particles.length; a++) {
+      for (let b = a + 1; b < particles.length; b++) {
+        const p1 = particles[a], p2 = particles[b];
+        const dx = p1.x - p2.x, dy = p1.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < linkDist) {
+          ctx.strokeStyle = 'rgba(59, 130, 246, ' + (0.12 * (1 - dist / linkDist)) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    for (let c = 0; c < particles.length; c++) {
+      const pc = particles[c];
+      ctx.beginPath();
+      ctx.arc(pc.x, pc.y, pc.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(37, 99, 235, 0.35)';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  scene.addEventListener('pointermove', (event) => {
+    const rect = scene.getBoundingClientRect();
+    mouse.x = event.clientX - rect.left;
+    mouse.y = event.clientY - rect.top;
+  });
+  scene.addEventListener('pointerleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 150);
+  });
+
+  resize();
+  step();
 })();
 })();

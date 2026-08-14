@@ -4,11 +4,20 @@
 
 {% block content %}
 
+
+
 <section class="auth-cinema" data-login-cinema>
+  <canvas class="auth-cinema__particles" data-login-particles aria-hidden="true"></canvas>
   <div class="auth-cinema__grid"></div>
   <div class="auth-cinema__glow auth-cinema__glow--one"></div>
   <div class="auth-cinema__glow auth-cinema__glow--two"></div>
   <div class="auth-cinema__orbit"></div>
+  <div class="auth-cinema__vignette"></div>
+
+  <span class="auth-tag auth-tag--1" aria-hidden="true">git commit -m "login"</span>
+  <span class="auth-tag auth-tag--2" aria-hidden="true">POST /auth</span>
+  <span class="auth-tag auth-tag--3" aria-hidden="true">&lt;Session /&gt;</span>
+  <span class="auth-tag auth-tag--4" aria-hidden="true">status: 200 OK</span>
 
   <div class="auth-cinema__stage" data-login-tilt>
     <div class="auth-card" data-login-tilt-frame>
@@ -83,27 +92,29 @@
       </div>
 
       <div class="auth-card__inner">
-        <span class="eyebrow auth-eyebrow">
-          {% if page == 'register' %}◆ Join the network{% else %}◆ Welcome back{% endif %}
-        </span>
-        <h1 class="auth-card__title">
-          {% if page == 'register' %}Create your account{% else %}Sign in to continue{% endif %}
-        </h1>
-        <p class="auth-card__lede">
-          {% if page == 'register' %}
-            Set up your developer profile and start showcasing what you build.
-          {% else %}
-            Good to see you again — your projects are waiting.
-          {% endif %}
-        </p>
+        <div class="auth-reveal auth-reveal--1">
+          <span class="eyebrow auth-eyebrow">
+            {% if page == 'register' %}◆ Join the network{% else %}◆ Welcome back{% endif %}
+          </span>
+          <h1 class="auth-card__title">
+            {% if page == 'register' %}Create your account{% else %}Sign in to continue{% endif %}
+          </h1>
+          <p class="auth-card__lede">
+            {% if page == 'register' %}
+              Set up your developer profile and start showcasing what you build.
+            {% else %}
+              Good to see you again — your projects are waiting.
+            {% endif %}
+          </p>
+        </div>
 
-        <div class="auth-switch" role="tablist" aria-label="Choose sign in or register">
+        <div class="auth-switch auth-reveal auth-reveal--2" role="tablist" aria-label="Choose sign in or register">
           <a href="{% url 'login' %}" class="auth-switch__option {% if page != 'register' %}is-active{% endif %}" role="tab" aria-selected="{% if page != 'register' %}true{% else %}false{% endif %}">Sign In</a>
           <a href="{% url 'register' %}" class="auth-switch__option {% if page == 'register' %}is-active{% endif %}" role="tab" aria-selected="{% if page == 'register' %}true{% else %}false{% endif %}">Register</a>
         </div>
 
         {% if page == 'register' %}
-        <form action="{% url 'register' %}" method="POST" class="auth-form">
+        <form action="{% url 'register' %}" method="POST" class="auth-form auth-reveal auth-reveal--3">
           {% csrf_token %}
           {{ form.as_p }}
           <button type="submit" class="btn btn--primary auth-submit">
@@ -114,7 +125,7 @@
           </button>
         </form>
         {% else %}
-        <form action="{% url 'login' %}" method="POST" class="auth-form">
+        <form action="{% url 'login' %}" method="POST" class="auth-form auth-reveal auth-reveal--3">
           {% csrf_token %}
           <p>
             <label for="loginUsername">Username</label>
