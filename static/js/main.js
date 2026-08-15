@@ -757,4 +757,61 @@
   resize();
   step();
 })();
+
+  /* --- liquid flow transition between Sign In and Register --- */
+  (() => {
+    const authScene = document.querySelector('[data-login-cinema]');
+    const authStage = document.querySelector('[data-login-tilt]');
+    const switchLinks = document.querySelectorAll('.auth-switch__option[href]');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!authScene || !authStage || !switchLinks.length) return;
+
+    switchLinks.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        if (reduce || link.classList.contains('is-active')) return;
+
+        const href = link.href;
+        if (!href || authScene.classList.contains('is-transitioning')) return;
+
+        event.preventDefault();
+
+        const rect = link.getBoundingClientRect();
+
+        authScene.style.setProperty(
+          '--flow-x',
+          `${rect.left + rect.width / 2}px`
+        );
+
+        authScene.style.setProperty(
+          '--flow-y',
+          `${rect.top + rect.height / 2}px`
+        );
+
+        let blob = authScene.querySelector('.auth-flow-transition');
+
+        if (!blob) {
+          blob = document.createElement('div');
+          blob.className = 'auth-flow-transition';
+          blob.setAttribute('aria-hidden', 'true');
+          authScene.appendChild(blob);
+        }
+
+        // Restart the animation every time the user switches page.
+        blob.style.animation = 'none';
+        void blob.offsetWidth;
+        blob.style.animation = '';
+
+        authScene.classList.add('is-transitioning');
+
+        // Navigate after the flow animation finishes.
+        window.setTimeout(() => {
+          window.location.assign(href);
+        }, 500);
+      });
+    });
+  })();
+
+
+
 })();

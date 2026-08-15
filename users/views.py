@@ -106,3 +106,6 @@ def userProfile(request, pk):
     return render(request, 'users/userProfile.html', context)
 
 
+def userAccount(request):
+    context = {}
+    return render(request, 'users/account.html', context)
