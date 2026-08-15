@@ -566,13 +566,6 @@
       cat.style.setProperty('--eye-x', cx.toFixed(3));
       cat.style.setProperty('--eye-y', cy.toFixed(3));
 
-      if (scene) {
-        pcx += (ptx - pcx) * 0.06;
-        pcy += (pty - pcy) * 0.06;
-        scene.style.setProperty('--parallax-x', pcx.toFixed(3));
-        scene.style.setProperty('--parallax-y', pcy.toFixed(3));
-      }
-
       const settled =
         Math.abs(tx - cx) < 0.001 && Math.abs(ty - cy) < 0.001 &&
         Math.abs(ptx - pcx) < 0.001 && Math.abs(pty - pcy) < 0.001;
