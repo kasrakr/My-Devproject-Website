@@ -197,6 +197,31 @@
   }
 
   /* ---------------------------------------------------------------------
+     Hero code window: line-by-line typing reveal
+  --------------------------------------------------------------------- */
+  if (codeWindow) {
+    var codeLines = codeWindow.querySelectorAll('.code-body .line');
+    var codeResult = codeWindow.querySelector('.code-result');
+
+    if (prefersReducedMotion) {
+      codeLines.forEach(function (line) { line.classList.add('is-visible'); });
+      if (codeResult) codeResult.classList.add('show');
+    } else {
+      var lineDelay = 180; // ms between each line appearing
+      codeLines.forEach(function (line, i) {
+        setTimeout(function () {
+          line.classList.add('is-visible');
+        }, lineDelay * (i + 1));
+      });
+      if (codeResult) {
+        setTimeout(function () {
+          codeResult.classList.add('show');
+        }, lineDelay * codeLines.length + 350);
+      }
+    }
+  }
+
+  /* ---------------------------------------------------------------------
      Hero particle network (canvas)
   --------------------------------------------------------------------- */
   var canvas = document.getElementById('particleCanvas');
