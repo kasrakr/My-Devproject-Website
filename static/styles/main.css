@@ -4612,3 +4612,41 @@ a.tag-pill:hover {
 @media (max-width: 560px) {
   .skills-add-form .btn { width: 100%; margin-top: 0; }
 }
+
+/* ==========================================================================
+   30. AUTH PAGE — LIQUID BLOB TRANSITION
+   ========================================================================== */
+.page-blob {
+  position: fixed;
+  top: var(--blob-y, 50%);
+  left: var(--blob-x, 50%);
+  width: 250vmax;
+  height: 250vmax;
+  margin: -125vmax 0 0 -125vmax;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, var(--color-primary-600) 0%, var(--color-primary-700) 68%);
+  transform: scale(0);
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform, border-radius;
+}
+.page-blob.is-revealing { animation: blobReveal 0.9s var(--ease) both; }
+.page-blob.is-covering  { animation: blobGrow 0.62s cubic-bezier(0.65, 0, 0.35, 1) both; }
+.page-blob.is-static-hidden { display: none; }
+
+@keyframes blobGrow {
+  0%   { transform: scale(0);    border-radius: 50%; }
+  35%  { transform: scale(0.42); border-radius: 42% 58% 63% 37% / 46% 40% 60% 54%; }
+  65%  { transform: scale(0.78); border-radius: 57% 43% 40% 60% / 54% 49% 51% 46%; }
+  100% { transform: scale(1);    border-radius: 46% 54% 50% 50% / 50% 46% 54% 50%; }
+}
+@keyframes blobReveal {
+  0%   { transform: scale(1);    border-radius: 46% 54% 50% 50% / 50% 46% 54% 50%; }
+  35%  { transform: scale(0.7);  border-radius: 55% 45% 42% 58% / 52% 47% 53% 48%; }
+  70%  { transform: scale(0.28); border-radius: 40% 60% 62% 38% / 47% 42% 58% 53%; }
+  100% { transform: scale(0);    border-radius: 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-blob { animation: none !important; transform: scale(0) !important; }
+}

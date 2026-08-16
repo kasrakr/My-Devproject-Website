@@ -758,60 +758,66 @@
   step();
 })();
 
-  /* --- liquid flow transition between Sign In and Register --- */
-  (() => {
-    const authScene = document.querySelector('[data-login-cinema]');
-    const authStage = document.querySelector('[data-login-tilt]');
-    const switchLinks = document.querySelectorAll('.auth-switch__option[href]');
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ---------------------------------------------------------------------
+   Login / register: liquid blob page transition
+   The blob grows from whichever switch tab was clicked, covers the
+   screen, then the real navigation happens. On arrival, it shrinks
+   back down from the now-active tab (same on-screen spot the old
+   page's link was clicked from), so the motion reads as continuous
+   across the full page load.
+   (used on the auth page, harmless elsewhere)
+--------------------------------------------------------------------- */
+(() => {
+  const blob = document.querySelector('[data-page-blob]');
+  const switchLinks = document.querySelectorAll('.auth-switch__option');
+  if (!blob || !switchLinks.length) return;
 
-    if (!authScene || !authStage || !switchLinks.length) return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    switchLinks.forEach((link) => {
-      link.addEventListener('click', (event) => {
-        if (reduce || link.classList.contains('is-active')) return;
+  function setOrigin(el) {
+    const rect = el.getBoundingClientRect();
+    blob.style.setProperty('--blob-x', (rect.left + rect.width / 2) + 'px');
+    blob.style.setProperty('--blob-y', (rect.top + rect.height / 2) + 'px');
+  }
 
-        const href = link.href;
-        if (!href || authScene.classList.contains('is-transitioning')) return;
+  if (reducedMotion) {
+    blob.classList.add('is-static-hidden');
+    return;
+  }
 
+  const activeTab = document.querySelector('.auth-switch__option.is-active');
+  if (activeTab) setOrigin(activeTab);
+  blob.classList.add('is-revealing');
+
+  switchLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (link.classList.contains('is-active')) {
         event.preventDefault();
+        return;
+      }
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
-        const rect = link.getBoundingClientRect();
+      event.preventDefault();
+      const href = link.getAttribute('href');
+      setOrigin(link);
+      blob.classList.remove('is-revealing');
+      blob.classList.add('is-covering');
 
-        authScene.style.setProperty(
-          '--flow-x',
-          `${rect.left + rect.width / 2}px`
-        );
-
-        authScene.style.setProperty(
-          '--flow-y',
-          `${rect.top + rect.height / 2}px`
-        );
-
-        let blob = authScene.querySelector('.auth-flow-transition');
-
-        if (!blob) {
-          blob = document.createElement('div');
-          blob.className = 'auth-flow-transition';
-          blob.setAttribute('aria-hidden', 'true');
-          authScene.appendChild(blob);
-        }
-
-        // Restart the animation every time the user switches page.
-        blob.style.animation = 'none';
-        void blob.offsetWidth;
-        blob.style.animation = '';
-
-        authScene.classList.add('is-transitioning');
-
-        // Navigate after the flow animation finishes.
-        window.setTimeout(() => {
-          window.location.assign(href);
-        }, 500);
-      });
+      window.setTimeout(() => {
+        window.location.href = href;
+      }, 620);
     });
-  })();
+  });
 
-
-
+  // Back/forward navigation can restore the page from bfcache mid
+  // animation class — reset it to a clean reveal instead of leaving
+  // it stuck covering the screen.
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      blob.classList.remove('is-covering');
+      if (activeTab) setOrigin(activeTab);
+      blob.classList.add('is-revealing');
+    }
+  });
+})();
 })();
