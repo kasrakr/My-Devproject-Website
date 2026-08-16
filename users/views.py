@@ -2,9 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm, SkillForm
 from django.contrib.auth.models import User
-from .models import profile
+from .models import profile, Skill
 # Create your views here.
 
 
@@ -106,6 +106,51 @@ def userProfile(request, pk):
     return render(request, 'users/userProfile.html', context)
 
 
+@login_required(login_url='login')
 def userAccount(request):
-    context = {}
+    profile_item = request.user.profile
+    skills = profile_item.skills.all()
+    projects = list(profile_item.project_set.all().order_by('-created'))
+
+    form = ProfileForm(instance=profile_item)
+    skill_form = SkillForm()
+
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'profile':
+            form = ProfileForm(request.POST, request.FILES, instance=profile_item)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your profile was updated successfully!')
+                return redirect('account')
+            else:
+                messages.error(request, 'Please fix the errors below and try again.')
+
+        elif form_type == 'add_skill':
+            skill_form = SkillForm(request.POST)
+            if skill_form.is_valid():
+                skill = skill_form.save(commit=False)
+                skill.owner = profile_item
+                skill.save()
+                messages.success(request, 'Skill added!')
+                return redirect('account')
+            else:
+                messages.error(request, 'Please give the skill a name.')
+
+        elif form_type == 'delete_skill':
+            skill_id = request.POST.get('skill_id')
+            Skill.objects.filter(id=skill_id, owner=profile_item).delete()
+            messages.success(request, 'Skill removed.')
+            return redirect('account')
+
+    context = {
+        'profile': profile_item,
+        'skills': skills,
+        'skills_count': len(skills),
+        'projects': projects,
+        'projects_count': len(projects),
+        'form': form,
+        'skill_form': skill_form,
+    }
     return render(request, 'users/account.html', context)

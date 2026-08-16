@@ -1,0 +1,260 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}Your Account · DevProject{% endblock title %}
+{% block description %}Manage your DevProject profile, skills, and projects.{% endblock description %}
+
+{% block content %}
+
+  <!-- ============================= PAGE HEAD ============================= -->
+  <div class="page-head">
+    <div class="section-inner">
+      <a href="{% url 'userProfile' profile.id %}" class="back-link">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to your profile
+      </a>
+      <p class="eyebrow">Account</p>
+      <h1 class="page-head__title">Your account</h1>
+      <p class="page-head__subtitle">Update your profile, manage your skills, and keep your info current.</p>
+    </div>
+  </div>
+
+  <!-- ============================= PROFILE FORM ============================= -->
+  <section class="section" id="account-profile">
+    <div class="section-inner">
+      <div class="form-page">
+
+        <!-- Edit form -->
+        <form class="project-form glass" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="form_type" value="profile">
+
+          <div class="field">
+            <label>Profile photo</label>
+            <div class="file-drop" data-file-drop>
+              <input type="file" name="profile_image" accept="image/*" id="{{ form.profile_image.id_for_label }}">
+              <div class="file-drop__hint">
+                <svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+                <span>Click or drag a new photo here</span>
+              </div>
+              {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="" class="file-drop__preview" data-file-preview>
+              {% else %}
+                <img alt="" class="file-drop__preview" data-file-preview hidden>
+              {% endif %}
+            </div>
+            {% if form.profile_image.errors %}<span class="field-error">{{ form.profile_image.errors.0 }}</span>{% endif %}
+          </div>
+
+          <div class="form-row">
+            <div class="field{% if form.name.errors %} has-error{% endif %}">
+              <label for="{{ form.name.id_for_label }}">Full name</label>
+              {{ form.name }}
+              <span class="field-error">{{ form.name.errors.0 }}</span>
+            </div>
+            <div class="field{% if form.username.errors %} has-error{% endif %}">
+              <label for="{{ form.username.id_for_label }}">Username</label>
+              {{ form.username }}
+              <span class="field-error">{{ form.username.errors.0 }}</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field{% if form.email.errors %} has-error{% endif %}">
+              <label for="{{ form.email.id_for_label }}">Email</label>
+              {{ form.email }}
+              <span class="field-error">{{ form.email.errors.0 }}</span>
+            </div>
+            <div class="field{% if form.location.errors %} has-error{% endif %}">
+              <label for="{{ form.location.id_for_label }}">Location</label>
+              {{ form.location }}
+              <span class="field-error">{{ form.location.errors.0 }}</span>
+            </div>
+          </div>
+
+          <div class="field{% if form.short_intro.errors %} has-error{% endif %}">
+            <label for="{{ form.short_intro.id_for_label }}">Short intro</label>
+            {{ form.short_intro }}
+            <span class="field-error">{{ form.short_intro.errors.0 }}</span>
+          </div>
+
+          <div class="field{% if form.bio.errors %} has-error{% endif %}">
+            <label for="{{ form.bio.id_for_label }}">Bio</label>
+            {{ form.bio }}
+            <span class="field-error">{{ form.bio.errors.0 }}</span>
+          </div>
+
+          <p class="eyebrow" style="margin-top: 0.5rem;">Social links</p>
+
+          <div class="form-row">
+            <div class="field{% if form.social_github.errors %} has-error{% endif %}">
+              <label for="{{ form.social_github.id_for_label }}">GitHub</label>
+              {{ form.social_github }}
+              <span class="field-error">{{ form.social_github.errors.0 }}</span>
+            </div>
+            <div class="field{% if form.social_linkedin.errors %} has-error{% endif %}">
+              <label for="{{ form.social_linkedin.id_for_label }}">LinkedIn</label>
+              {{ form.social_linkedin }}
+              <span class="field-error">{{ form.social_linkedin.errors.0 }}</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field{% if form.social_telegram.errors %} has-error{% endif %}">
+              <label for="{{ form.social_telegram.id_for_label }}">Telegram</label>
+              {{ form.social_telegram }}
+              <span class="field-error">{{ form.social_telegram.errors.0 }}</span>
+            </div>
+            <div class="field{% if form.social_whatsapp.errors %} has-error{% endif %}">
+              <label for="{{ form.social_whatsapp.id_for_label }}">WhatsApp</label>
+              {{ form.social_whatsapp }}
+              <span class="field-error">{{ form.social_whatsapp.errors.0 }}</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field{% if form.social_youtube.errors %} has-error{% endif %}">
+              <label for="{{ form.social_youtube.id_for_label }}">YouTube</label>
+              {{ form.social_youtube }}
+              <span class="field-error">{{ form.social_youtube.errors.0 }}</span>
+            </div>
+            <div class="field{% if form.social_website.errors %} has-error{% endif %}">
+              <label for="{{ form.social_website.id_for_label }}">Website</label>
+              {{ form.social_website }}
+              <span class="field-error">{{ form.social_website.errors.0 }}</span>
+            </div>
+          </div>
+
+          <div class="project-form__actions">
+            <button type="submit" class="btn btn--primary">Save changes</button>
+          </div>
+        </form>
+
+        <!-- Summary sidebar -->
+        <div class="detail-info glass account-summary">
+          <div class="account-avatar">
+            {% if profile.profile_image %}
+              <img src="{{ profile.profile_image.url }}" alt="{{ profile.username }}">
+            {% endif %}
+          </div>
+          <h3 class="account-summary__name">{{ profile.name|default:profile.username }}</h3>
+          {% if profile.short_intro %}<p class="account-summary__intro">{{ profile.short_intro }}</p>{% endif %}
+
+          <div class="hero__stats" style="justify-content: center; margin-top: 1.5rem;">
+            <div class="stat-chip glass">
+              <span class="stat-chip__value">{{ skills_count }}</span>
+              <span class="stat-chip__label">SKILLS</span>
+            </div>
+            <div class="stat-chip glass">
+              <span class="stat-chip__value">{{ projects_count }}</span>
+              <span class="stat-chip__label">PROJECTS</span>
+            </div>
+            <div class="stat-chip glass">
+              <span class="stat-chip__value">{{ profile.created|date:"M Y" }}</span>
+              <span class="stat-chip__label">MEMBER SINCE</span>
+            </div>
+          </div>
+
+          <hr class="account-divider">
+
+          <a href="{% url 'userProfile' profile.id %}" class="btn btn--ghost btn--sm btn--block">View public profile</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SKILLS ============================= -->
+  <section class="section section--tint" id="account-skills">
+    <div class="section-inner">
+      <p class="eyebrow reveal">Skills</p>
+      <h2 class="section__title reveal" style="margin-bottom: 1.75rem;">Your skills</h2>
+
+      <div class="glass reveal" style="padding: 1.75rem 1.6rem;">
+        {% if skills %}
+          <div class="tag-pills">
+            {% for skill in skills %}
+              <div class="skill-pill">
+                {{ skill.name }}
+                <form method="post" action="{% url 'account' %}" data-confirm-delete="Remove “{{ skill.name }}” from your skills?">
+                  {% csrf_token %}
+                  <input type="hidden" name="form_type" value="delete_skill">
+                  <input type="hidden" name="skill_id" value="{{ skill.id }}">
+                  <button type="submit" class="skill-pill__remove" aria-label="Remove {{ skill.name }}">×</button>
+                </form>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p>You haven't added any skills yet — add your first one below.</p>
+        {% endif %}
+
+        <form class="skills-add-form" method="post" action="{% url 'account' %}">
+          {% csrf_token %}
+          <input type="hidden" name="form_type" value="add_skill">
+          <div class="field">
+            <label for="{{ skill_form.name.id_for_label }}">Skill name</label>
+            {{ skill_form.name }}
+          </div>
+          <div class="field">
+            <label for="{{ skill_form.description.id_for_label }}">Description (optional)</label>
+            {{ skill_form.description }}
+          </div>
+          <button type="submit" class="btn btn--primary btn--sm">Add skill</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= PROJECTS ============================= -->
+  <section class="section" id="account-projects">
+    <div class="section-inner">
+      <div class="page-head__row" style="margin-bottom: 1.75rem;">
+        <div>
+          <p class="eyebrow reveal">Projects</p>
+          <h2 class="section__title reveal" style="margin-top: 0.5rem;">Your projects</h2>
+        </div>
+        <a href="{% url 'create-project' %}" class="btn btn--primary btn--sm">+ New project</a>
+      </div>
+
+      {% if projects %}
+      <div class="grid grid--3">
+        {% for proj in projects %}
+        <article class="project-card glass reveal">
+          <a href="{% url 'project' proj.id %}" class="project-card__media">
+            {% if proj.featured_image %}
+              <img src="{{ proj.featured_image.url }}" alt="{{ proj.title }}" loading="lazy">
+            {% else %}
+              <img src="https://placehold.co/640x480/3B82F6/ffffff?text={{ proj.title|urlencode }}" alt="{{ proj.title }}" loading="lazy">
+            {% endif %}
+          </a>
+
+          <div class="project-card__body">
+            <a href="{% url 'project' proj.id %}" class="project-card__title-link">
+              <h3>{{ proj.title }}</h3>
+            </a>
+            <div class="project-card__meta">
+              <span class="project-card__votes">{{ proj.vote_ratio }}%<span class="project-card__votes-total"> · {{ proj.vote_total }} vote{{ proj.vote_total|pluralize }}</span></span>
+              <span class="project-card__date">{{ proj.created|date:"M j, Y" }}</span>
+            </div>
+          </div>
+
+          <div class="project-card__actions">
+            <a href="{% url 'project' proj.id %}" class="btn btn--ghost btn--sm">View</a>
+            <a href="{% url 'update-project' proj.id %}" class="btn btn--ghost btn--sm">Edit</a>
+            <a href="{% url 'delete-project' proj.id %}" class="btn btn--danger btn--sm">Delete</a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state glass reveal">
+        <h3>No projects yet</h3>
+        <p>Create your first project and it'll show up here.</p>
+        <a href="{% url 'create-project' %}" class="btn btn--primary">Create Project</a>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+{% endblock content %}

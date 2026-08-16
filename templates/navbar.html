@@ -22,8 +22,8 @@
     </nav>
     {% if request.user.is_authenticated %}
     <div class="nav__actions">
-      <a href="{% url 'create-project' %}" class="btn btn--primary btn--sm"
-        >Create Project</a
+      <a href="{% url 'account' %}" class="btn btn--primary btn--sm"
+        >Account</a
       >
       <a href="{% url 'logout' %}" class="btn btn--ghost btn--sm"
         >Logout</a

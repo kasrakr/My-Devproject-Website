@@ -1,5 +1,41 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django import forms
+from .models import profile, Skill
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = profile
+        fields = [
+            'profile_image',
+            'name', 'username', 'email', 'location',
+            'short_intro', 'bio',
+            'social_github', 'social_linkedin', 'social_telegram',
+            'social_whatsapp', 'social_youtube', 'social_website',
+        ]
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Your full name'}),
+            'location': forms.TextInput(attrs={'placeholder': 'City, Country'}),
+            'short_intro': forms.TextInput(attrs={'placeholder': 'e.g. Backend developer, Django enthusiast'}),
+            'bio': forms.Textarea(attrs={'rows': 6, 'placeholder': 'Tell people a bit about yourself…'}),
+            'social_github': forms.TextInput(attrs={'placeholder': 'https://github.com/username'}),
+            'social_linkedin': forms.TextInput(attrs={'placeholder': 'https://linkedin.com/in/username'}),
+            'social_telegram': forms.TextInput(attrs={'placeholder': 'https://t.me/username'}),
+            'social_whatsapp': forms.TextInput(attrs={'placeholder': 'https://wa.me/…'}),
+            'social_youtube': forms.TextInput(attrs={'placeholder': 'https://youtube.com/@username'}),
+            'social_website': forms.TextInput(attrs={'placeholder': 'https://yoursite.com'}),
+        }
+
+
+class SkillForm(forms.ModelForm):
+    class Meta:
+        model = Skill
+        fields = ['name', 'description']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'e.g. Django'}),
+            'description': forms.Textarea(attrs={'rows': 3, 'placeholder': 'What you can do with it…'}),
+        }
+
 
 
 class CustomUserCreationForm(UserCreationForm):

@@ -4551,89 +4551,64 @@ a.tag-pill:hover {
     transition: none !important;
   }
 }
-
-/* --------------------------------------------------------------------------
-   AUTH FLOW TRANSITION
-   Liquid/blob transition from the Sign In / Register switch into the
-   destination auth page.
-   -------------------------------------------------------------------------- */
-.auth-flow-transition {
-  position: fixed;
-  z-index: 9999;
-  left: var(--flow-x, 50vw);
-  top: var(--flow-y, 50vh);
-  width: 24px;
-  height: 24px;
-  border-radius: 58% 42% 64% 36% / 42% 58% 36% 64%;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0) rotate(-8deg);
-  background:
-    radial-gradient(circle at 32% 28%, rgba(255,255,255,.42), transparent 22%),
-    linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-700) 52%, #172554 100%);
-  box-shadow:
-    0 0 70px rgba(37,99,235,.34),
-    0 30px 90px rgba(15,23,42,.24);
-  will-change: transform, border-radius, opacity;
-  filter: saturate(115%);
+/* ==========================================================================
+   29. ACCOUNT PAGE
+   ========================================================================== */
+.account-avatar {
+  width: 116px;
+  height: 116px;
+  margin: 0 auto 1.1rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--color-primary-100);
+  box-shadow: 0 10px 26px rgba(37, 99, 235, 0.18);
 }
+.account-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-.auth-cinema.is-transitioning .auth-flow-transition {
-  animation: authFlowExpand .62s cubic-bezier(.65,0,.18,1) forwards;
+.account-summary { text-align: center; }
+.account-summary__name { font-size: 1.15rem; }
+.account-summary__intro { font-size: 0.88rem; margin-top: 0.2rem; }
+
+.account-divider { border: none; border-top: 1px solid var(--color-line); margin: 1.5rem 0; }
+
+.skill-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-primary-700);
+  background: var(--color-primary-50);
+  border: 1px solid var(--color-primary-100);
+  padding: 0.4rem 0.5rem 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
 }
-
-.auth-cinema.is-transitioning .auth-card {
-  animation: authCardFlowOut .36s cubic-bezier(.65,0,.18,1) forwards;
+.skill-pill form { display: contents; }
+.skill-pill__remove {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  line-height: 1;
+  color: var(--color-primary-600);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
+.skill-pill__remove:hover { background: #EF4444; color: #fff; }
 
-.auth-cinema.is-transitioning .login-cat {
-  animation: authCatFlowOut .32s cubic-bezier(.65,0,.18,1) forwards;
+.skills-add-form {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-line);
 }
-
-@keyframes authFlowExpand {
-  0% {
-    opacity: 1;
-    border-radius: 58% 42% 64% 36% / 42% 58% 36% 64%;
-    transform: translate(-50%, -50%) scale(0);
-  }
-  24% {
-    border-radius: 39% 61% 48% 52% / 58% 38% 62% 42%;
-  }
-  48% {
-    border-radius: 67% 33% 58% 42% / 41% 59% 40% 60%;
-  }
-  72% {
-    border-radius: 46% 54% 35% 65% / 63% 37% 57% 43%;
-  }
-  100% {
-    opacity: 1;
-    border-radius: 42% 58% 55% 45% / 52% 44% 56% 48%;
-    transform: translate(-50%, -50%) scale(15);
-  }
-}
-
-@keyframes authCardFlowOut {
-  from {
-    opacity: 1;
-    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(.94) translateY(10px);
-  }
-}
-
-@keyframes authCatFlowOut {
-  from {
-    opacity: 1;
-    transform: translateX(-50%) rotate(calc(var(--eye-x, 0) * 1.5deg)) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-50%) rotate(calc(var(--eye-x, 0) * 1.5deg)) scale(.78) translateY(8px);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .auth-flow-transition { display: none; }
+.skills-add-form .field { flex: 1 1 180px; margin-bottom: 0; }
+.skills-add-form .btn { flex-shrink: 0; margin-top: 1.85rem; }
+@media (max-width: 560px) {
+  .skills-add-form .btn { width: 100%; margin-top: 0; }
 }

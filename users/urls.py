@@ -7,4 +7,5 @@ urlpatterns = [
     path('register/', views.registerUser, name="register"),
     path('', views.profiles, name="profiles"),  # if its blank '' it means its become your homepage
     path('profile/<str:pk>/', views.userProfile, name="userProfile"),
+    path('account/', views.userAccount, name="account"),
 ]
