@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseForbidden
 from .models import Project
 from .forms import ProjectForm
 from django.contrib.auth.decorators import login_required
@@ -18,7 +18,7 @@ def projects(request):
 
 def project(request,pk):
     # return HttpResponse('Single project '+str(pk))   # it must have pk
-    projectobj = Project.objects.get(id=pk)
+    projectobj = get_object_or_404(Project, id=pk)
     tags = projectobj.tags.all()
     return render(request, 'projects/single-project.html',{'projectlist':projectobj, 'tags':tags})
 
@@ -29,7 +29,9 @@ def CreateProject(request):
     if request.method =='POST':
         form = ProjectForm(request.POST,request.FILES)
         if form.is_valid():
-            form.save()
+            project = form.save(commit=False)
+            project.owner = request.user.profile
+            project.save()
             return redirect('projects')
 
     context = {'form':form}
@@ -37,7 +39,11 @@ def CreateProject(request):
 
 @login_required(login_url="login")
 def UpdateProject(request,pk):
-    projectt = Project.objects.get(id=pk)
+    projectt = get_object_or_404(Project, id=pk)
+
+    if projectt.owner != request.user.profile:
+        return HttpResponseForbidden("You don't have permission to edit this project.")
+
     form = ProjectForm(instance=projectt)
 
     if request.method =='POST':
@@ -51,10 +57,14 @@ def UpdateProject(request,pk):
 
 
 @login_required(login_url="login")
-def DeleteProject(requset,pk):
-    project3 = Project.objects.get(id=pk)
-    if requset.method=='POST':
+def DeleteProject(request,pk):
+    project3 = get_object_or_404(Project, id=pk)
+
+    if project3.owner != request.user.profile:
+        return HttpResponseForbidden("You don't have permission to delete this project.")
+
+    if request.method=='POST':
         project3.delete()
         return redirect('projects')
     context={'proname':project3}
-    return render(requset,'projects/delete_template.html',context)
+    return render(request,'projects/delete_template.html',context)

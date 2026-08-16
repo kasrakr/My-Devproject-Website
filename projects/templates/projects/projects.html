@@ -235,18 +235,20 @@
           </a>
           <div class="project-card__meta">
             <span class="project-card__votes">{{ proj.vote_ratio }}%<span class="project-card__votes-total"> · {{ proj.vote_total }} vote{{ proj.vote_total|pluralize }}</span></span>
+            {% if proj.owner %}
             <span class="project-card__votes">
     <a href="{% url 'userProfile' proj.owner.id %}">
         {{ proj.owner }}
     </a>
 </span>
+            {% endif %}
             <span class="project-card__date">{{ proj.created|date:"M j, Y" }}</span>
           </div>
         </div>
 
         <div class="project-card__actions">
           <a href="{% url 'project' proj.id %}" class="btn btn--ghost btn--sm">View</a>
-          {% if request.user.is_authenticated %}
+          {% if request.user.is_authenticated and request.user.profile == proj.owner %}
             <a href="{% url 'update-project' proj.id %}" class="btn btn--ghost btn--sm">Edit</a>
             <a href="{% url 'delete-project' proj.id %}" class="btn btn--danger btn--sm">Delete</a>
           {% endif %}
@@ -379,3 +381,4 @@
 
 
 {% endblock content %}
+

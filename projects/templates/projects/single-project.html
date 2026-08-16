@@ -240,7 +240,7 @@
             {% endif %}
           </div>
 
-          {% if request.user.is_authenticated %}
+          {% if request.user.is_authenticated and request.user.profile == projectlist.owner %}
           <div class="detail-info__manage project-info-panel__manage">
             <a href="{% url 'update-project' projectlist.id %}" class="btn btn--ghost btn--block btn--sm">
               Edit Project
