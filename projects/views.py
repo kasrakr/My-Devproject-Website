@@ -1,19 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden
-from .models import Project
+from .models import Project,tag
 from .forms import ProjectForm
+from .utils import searchProjects
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
 
-
 def projects(request):
     # return HttpResponse('Here your projects')
+    projects, search_query = searchProjects(request)
     page = 'projects'
     number = 1
-    projects = Project.objects.all()
-    return render(request,'projects/projects.html',{'page':page, 'number':number, 'projectlist':projects})
+    context = {'page':page, 'number':number, 'projectlist':projects, 'search_query':search_query}
+    return render(request,'projects/projects.html',context)
     
 
 def project(request,pk):
@@ -68,3 +69,4 @@ def DeleteProject(request,pk):
         return redirect('projects')
     context={'proname':project3}
     return render(request,'projects/delete_template.html',context)
+

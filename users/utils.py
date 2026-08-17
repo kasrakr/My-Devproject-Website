@@ -2,7 +2,6 @@ from .models import profile, Skill
 from django.db.models import Q
 # for making querys | and &
 
-
 def searchProfiles(request):
     search_query = '' 
 

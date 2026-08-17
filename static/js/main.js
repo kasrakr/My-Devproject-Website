@@ -820,4 +820,31 @@
     }
   });
 })();
+
+/* ---------------------------------------------------------------------
+   Search results: auto-scroll to results after a search reload
+   (used on the Projects and Developers pages, harmless elsewhere)
+--------------------------------------------------------------------- */
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  const query = (params.get('search_query') || '').trim();
+  if (!query) return;
+
+  const results = document.querySelector('[data-search-results]');
+  if (!results) return;
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      results.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+
+      const head = results.querySelector('.section__head');
+      if (head) {
+        head.classList.add('is-pulsing');
+        window.setTimeout(() => head.classList.remove('is-pulsing'), 1300);
+      }
+    });
+  });
+})();
 })();

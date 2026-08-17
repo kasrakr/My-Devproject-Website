@@ -21,6 +21,18 @@
           <a href="#features" class="btn btn--ghost">See how it works</a>
         </div>
 
+        <form class="hero-search glass" action="{% url 'projects' %}" method="GET" role="search">
+          <svg class="hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <label for="projectSearchInput" class="sr-only">Search projects</label>
+          <input type="text" id="projectSearchInput" name="search_query" placeholder="Search projects by name…" value="{{ search_query }}" autocomplete="off">
+          <button type="submit" class="btn btn--primary hero-search__btn">
+            <span>Search</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+          </button>
+        </form>
+
         <div class="hero__stats" role="list">
           <div class="stat-chip glass" role="listitem">
             <span class="stat-chip__value">100%</span>
@@ -85,7 +97,7 @@
     <div class="hero__scroll-cue"><span></span></div>
   </section>
 
-  <!-- ============================= ABOUT ============================= -->
+
   <section class="section" id="about">
     <div class="section-inner about">
       <div class="about__media">
@@ -209,7 +221,7 @@
 
 
 <!-- ----------------------------projectlist------------------------------ -->
-<section class="section" id="projectss">
+<section class="section" id="projectss" data-search-results>
   <div class="section-inner">
     <div class="section__head">
         <p class="eyebrow reveal">Projects List</p>
