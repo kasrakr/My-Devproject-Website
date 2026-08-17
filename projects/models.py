@@ -29,6 +29,7 @@ class Project(models.Model):
 
 
 class review (models.Model):
+    owner = models.ForeignKey(profile, on_delete=models.CASCADE, null=True, blank=True)
     Project = models.ForeignKey(Project, on_delete=models.CASCADE) #cascade means if Project deleted review will delete too
     vote_type = (
         ('up', 'Up Vote'),
@@ -38,5 +39,10 @@ class review (models.Model):
     value = models.CharField(max_length=200, choices=vote_type)
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+
+    # this is for us for making sure someone can add review for a project only once not spamming it.
+    class Meta:
+        unique_together = [['owner', 'Project']]
+
     def __str__(self):
         return self.value
