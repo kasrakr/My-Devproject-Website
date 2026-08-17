@@ -22,8 +22,8 @@
     </nav>
     {% if request.user.is_authenticated %}
     <div class="nav__actions">
-      <a href="{% url 'inbox' %}" class="btn btn--ghost btn--sm"
-        >Inbox</a
+      <a href="{% url 'inbox' %}" class="btn btn--ghost btn--sm nav__inbox-link"
+        >Inbox{% if unread_message_count %}<span class="nav__inbox-badge">{{ unread_message_count }}</span>{% endif %}</a
       >
       <a href="{% url 'account' %}" class="btn btn--primary btn--sm"
         >Account</a
