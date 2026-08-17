@@ -4721,7 +4721,7 @@ a.tag-pill:hover {
   animation: resultsPulse 1.1s var(--ease) 1;
 }
 /* ==========================================================================
-   26. PROJECT REVIEWS
+   32. PROJECT REVIEWS
    ========================================================================== */
 
 .project-reviews {
@@ -4972,3 +4972,157 @@ a.tag-pill:hover {
     padding: 1.25rem;
   }
 }
+/* ==========================================================================
+   33. MESSAGING (INBOX / MESSAGE DETAIL)
+   ========================================================================== */
+.inbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.inbox-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.3rem;
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.inbox-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+.inbox-item__status {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: transparent;
+}
+.inbox-item.is-unread .inbox-item__status { background: var(--color-primary-600); }
+
+.inbox-item__avatar {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-primary-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-primary-600);
+}
+.inbox-item__avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.inbox-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.inbox-item__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.inbox-item__sender {
+  font-weight: 600;
+  color: var(--color-ink);
+  font-size: 0.92rem;
+}
+.inbox-item.is-unread .inbox-item__sender,
+.inbox-item.is-unread .inbox-item__subject {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+.inbox-item__date {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  flex-shrink: 0;
+}
+.inbox-item__subject {
+  font-size: 0.88rem;
+  color: var(--color-primary-700);
+}
+.inbox-item__preview {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.inbox-item__chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--color-muted);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 600px) {
+  .inbox-item__preview { display: none; }
+  .inbox-item { padding: 0.9rem 1rem; }
+}
+
+/* Message detail */
+.message-detail { padding: 2rem; }
+.message-detail__head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-line);
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.message-detail__avatar {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-primary-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-primary-600);
+}
+.message-detail__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.message-detail__from {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin-right: auto;
+}
+.message-detail__name { font-weight: 700; font-size: 1rem; }
+.message-detail__name a { color: var(--color-ink); text-decoration: none; }
+.message-detail__name a:hover { color: var(--color-primary-600); }
+.message-detail__email {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+.message-detail__date {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+.message-detail__body {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--color-ink-soft);
+}
+.message-detail__actions { margin-top: 2rem; }

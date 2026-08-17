@@ -1,3 +1,73 @@
 {% extends 'main.html' %}
+
+{% block title %}Message {{ recipient.name|default:recipient.username }} · DevProject{% endblock title %}
+{% block description %}Send a message to {{ recipient.name|default:recipient.username }} on DevProject.{% endblock description %}
+
 {% block content %}
+
+  <div class="page-head">
+    <div class="section-inner">
+      <a href="{% url 'userProfile' recipient.id %}" class="back-link">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to profile
+      </a>
+      <p class="eyebrow">New message</p>
+      <h1 class="page-head__title">Message {{ recipient.name|default:recipient.username }}</h1>
+      <p class="page-head__subtitle">Reach out about a project, an opportunity, or just to say hi.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="form-page">
+
+        <form method="POST" class="project-form glass">
+          {% csrf_token %}
+
+          <div class="form-row">
+            <div class="field{% if form.name.errors %} has-error{% endif %}">
+              <label for="{{ form.name.id_for_label }}">Your name</label>
+              {{ form.name }}
+              <span class="field-error">{{ form.name.errors.0 }}</span>
+            </div>
+            <div class="field{% if form.email.errors %} has-error{% endif %}">
+              <label for="{{ form.email.id_for_label }}">Your email</label>
+              {{ form.email }}
+              <span class="field-error">{{ form.email.errors.0 }}</span>
+            </div>
+          </div>
+
+          <div class="field{% if form.subject.errors %} has-error{% endif %}">
+            <label for="{{ form.subject.id_for_label }}">Subject</label>
+            {{ form.subject }}
+            <span class="field-error">{{ form.subject.errors.0 }}</span>
+          </div>
+
+          <div class="field{% if form.body.errors %} has-error{% endif %}">
+            <label for="{{ form.body.id_for_label }}">Message</label>
+            {{ form.body }}
+            <span class="field-error">{{ form.body.errors.0 }}</span>
+          </div>
+
+          <div class="project-form__actions">
+            <button type="submit" class="btn btn--primary">Send message</button>
+          </div>
+        </form>
+
+        <div class="detail-info glass account-summary">
+          <div class="account-avatar">
+            {% if recipient.profile_image %}
+              <img src="{{ recipient.profile_image.url }}" alt="{{ recipient.username }}">
+            {% endif %}
+          </div>
+          <h3 class="account-summary__name">{{ recipient.name|default:recipient.username }}</h3>
+          {% if recipient.short_intro %}<p class="account-summary__intro">{{ recipient.short_intro }}</p>{% endif %}
+          <hr class="account-divider">
+          <a href="{% url 'userProfile' recipient.id %}" class="btn btn--ghost btn--sm btn--block">View full profile</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
 {% endblock %}

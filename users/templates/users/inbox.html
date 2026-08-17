@@ -1,4 +1,70 @@
 {% extends 'main.html' %}
+
+{% block title %}Inbox · DevProject{% endblock title %}
+{% block description %}Messages from other developers on DevProject.{% endblock description %}
+
 {% block content %}
+
+  <div class="page-head">
+    <div class="section-inner">
+      <a href="{% url 'account' %}" class="back-link">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to your account
+      </a>
+      <p class="eyebrow">Inbox</p>
+      <h1 class="page-head__title">Your messages</h1>
+      <p class="page-head__subtitle">
+        {% if unreadCount %}
+          You have <strong>{{ unreadCount }}</strong> unread message{{ unreadCount|pluralize }}.
+        {% else %}
+          You're all caught up — no unread messages.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-inner">
+      {% if messageRequest %}
+      <div class="inbox-list">
+        {% for msg in messageRequest %}
+        <a href="{% url 'message' msg.id %}" class="inbox-item glass reveal {% if not msg.is_read %}is-unread{% endif %}">
+          <span class="inbox-item__status" aria-hidden="true"></span>
+
+          <span class="inbox-item__avatar">
+            {% if msg.sender.profile_image %}
+              <img src="{{ msg.sender.profile_image.url }}" alt="">
+            {% else %}
+              <span>{{ msg.sender.name|default:msg.name|default:"?"|slice:":1"|upper }}</span>
+            {% endif %}
+          </span>
+
+          <span class="inbox-item__body">
+            <span class="inbox-item__top">
+              <span class="inbox-item__sender">{{ msg.sender.name|default:msg.sender.username|default:msg.name|default:"Unknown sender" }}</span>
+              <span class="inbox-item__date">{{ msg.created|date:"M j" }}</span>
+            </span>
+            <span class="inbox-item__subject">{{ msg.subject|default:"(No subject)" }}</span>
+            <span class="inbox-item__preview">{{ msg.body|truncatechars:110 }}</span>
+          </span>
+
+          <svg class="inbox-item__chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state glass">
+        <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="var(--color-muted)" stroke-width="1.5" style="margin: 0 auto 1rem;">
+          <path d="M4 4h16v16H4z" opacity="0"/>
+          <path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2"/>
+          <path d="M3 8l9 6 9-6"/>
+          <path d="M3 8v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8"/>
+        </svg>
+        <h3>No messages yet</h3>
+        <p>When other developers reach out, their messages will show up here.</p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
 
 {% endblock %}

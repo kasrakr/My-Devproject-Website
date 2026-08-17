@@ -1,4 +1,62 @@
 {% extends 'main.html' %}
+
+{% block title %}{{ message.subject|default:"Message" }} · DevProject{% endblock title %}
+{% block description %}{{ message.body|truncatewords:25 }}{% endblock description %}
+
 {% block content %}
+
+  <div class="page-head">
+    <div class="section-inner">
+      <a href="{% url 'inbox' %}" class="back-link">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to inbox
+      </a>
+      <p class="eyebrow">Message</p>
+      <h1 class="page-head__title">{{ message.subject|default:"(No subject)" }}</h1>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="message-detail glass reveal" style="max-width: 720px; margin: 0 auto;">
+
+        <div class="message-detail__head">
+          <span class="message-detail__avatar">
+            {% if message.sender.profile_image %}
+              <img src="{{ message.sender.profile_image.url }}" alt="">
+            {% else %}
+              <span>{{ message.sender.name|default:message.name|default:"?"|slice:":1"|upper }}</span>
+            {% endif %}
+          </span>
+
+          <div class="message-detail__from">
+            <span class="message-detail__name">
+              {% if message.sender %}
+                <a href="{% url 'userProfile' message.sender.id %}">{{ message.sender.name|default:message.sender.username }}</a>
+              {% else %}
+                {{ message.name|default:"Unknown sender" }}
+              {% endif %}
+            </span>
+            {% if message.email %}<span class="message-detail__email">{{ message.email }}</span>{% endif %}
+          </div>
+
+          <span class="message-detail__date">{{ message.created|date:"F j, Y · g:i A" }}</span>
+        </div>
+
+        <div class="message-detail__body">
+          <p>{{ message.body|linebreaksbr }}</p>
+        </div>
+
+        {% if message.sender %}
+        <div class="message-detail__actions">
+          <a href="{% url 'create-message' message.sender.id %}" class="btn btn--primary">
+            Reply to {{ message.sender.name|default:message.sender.username }}
+          </a>
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </section>
 
 {% endblock %}
