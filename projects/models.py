@@ -30,7 +30,7 @@ class Project(models.Model):
 
 class review (models.Model):
     owner = models.ForeignKey(profile, on_delete=models.CASCADE, null=True, blank=True)
-    Project = models.ForeignKey(Project, on_delete=models.CASCADE) #cascade means if Project deleted review will delete too
+    Project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='reviews') #cascade means if Project deleted review will delete too
     vote_type = (
         ('up', 'Up Vote'),
         ('down', 'Down Vote')

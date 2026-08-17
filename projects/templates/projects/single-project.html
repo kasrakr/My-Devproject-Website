@@ -261,6 +261,105 @@
   </div>
 </section>
 
+{% if messages %}
+<div class="section-inner project-reviews__messages">
+  {% for message in messages %}
+  <p class="alert alert--{{ message.tags }}">{{ message }}</p>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Reviews -->
+<section class="section project-reviews" id="project-reviews">
+  <div class="section-inner">
+    <div class="project-reviews__layout">
+
+      <div class="project-reviews__list-wrap">
+        <div class="section__head">
+          <p class="eyebrow reveal">Community feedback</p>
+          <h2 class="section__title reveal">
+            {{ reviews|length }} Review{{ reviews|length|pluralize }}
+          </h2>
+        </div>
+
+        {% if reviews %}
+        <div class="project-reviews__list">
+          {% for review in reviews %}
+          <article class="review-card glass reveal">
+            <div class="review-card__head">
+              <span class="review-card__owner">{{ review.owner }}</span>
+              <span class="review-card__badge review-card__badge--{{ review.value }}">
+                {% if review.value == 'up' %}
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+                Upvote
+                {% else %}
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7" /></svg>
+                Downvote
+                {% endif %}
+              </span>
+            </div>
+
+            {% if review.body %}
+            <p class="review-card__body">{{ review.body }}</p>
+            {% endif %}
+
+            <span class="review-card__date">{{ review.created|date:"M j, Y" }}</span>
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="project-reviews__empty glass reveal">
+          No reviews yet — be the first to share your thoughts.
+        </p>
+        {% endif %}
+      </div>
+
+      <div class="project-reviews__form-wrap">
+        {% if request.user.is_authenticated %}
+
+          {% if user_review %}
+          <div class="project-reviews__notice glass reveal">
+            <p>You've already reviewed this project. Thanks for the feedback!</p>
+          </div>
+
+          {% elif projectlist.owner and request.user.profile == projectlist.owner %}
+          <div class="project-reviews__notice glass reveal">
+            <p>You can't review your own project.</p>
+          </div>
+
+          {% else %}
+          <form method="POST" class="project-reviews__form glass reveal">
+            {% csrf_token %}
+            <h3 class="project-reviews__form-title">Leave a review</h3>
+
+            <div class="form-field">
+              <label for="{{ form.value.id_for_label }}">Your vote</label>
+              {{ form.value }}
+            </div>
+
+            <div class="form-field">
+              <label for="{{ form.body.id_for_label }}">Comment</label>
+              {{ form.body }}
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--block">Submit review</button>
+          </form>
+          {% endif %}
+
+        {% else %}
+        <div class="project-reviews__notice glass reveal">
+          <p>Want to leave a review?</p>
+          <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn--ghost btn--block">
+            Log in to review
+          </a>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
 {% if related_projects %}
 <section class="section section--tint">
   <div class="section-inner">
