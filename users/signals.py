@@ -19,9 +19,3 @@ def createProfile(sender, instance, created, **kwargs):
 # because of that cascade in profile anytime user deleted it profile will delete too and there is no need to delete function
 
 
-# this one is for any time we delete the profile, user will delete too.
-@receiver(post_delete, sender=profile)
-def deleteUser(sender, instance, **kwargs):
-    user = instance.user
-    user.delete()
-# post_delete.connect(deleteUser, sender=profile)

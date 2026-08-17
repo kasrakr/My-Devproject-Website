@@ -5,6 +5,7 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm
 from django.contrib.auth.models import User
 from .models import profile, Skill
+from . utils import searchProfiles
 # Create your views here.
 
 
@@ -63,11 +64,11 @@ def registerUser(request):
 
 def profiles(request):
     # prefetch_related loads all skills for all profiles in one extra query
-    # (instead of one query per profile per .all()/.count() call in the
-    profiles_list = list(profile.objects.prefetch_related('skills'))
+    profiles_list , proFile, search_query = searchProfiles(request)
     context = {
-        'profiles': profiles_list,
+        'profiles': proFile,
         'profiles_count': len(profiles_list),
+        'search_query' : search_query,
     }
     return render(request, 'users/profiles.html', context)
 

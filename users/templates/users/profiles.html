@@ -120,6 +120,16 @@
     <span></span>
   </div>
 </section>
+  <div>
+    <form action="{% url 'profiles' %}" method="GET">
+      <div>
+      <label for="fromInput#search">Search Developers</label>
+      <input type="text" name="search_query" placeholder="Search by developer name" value="{{search_query}}">
+      </div>
+
+      <input type="submit" value="Search">
+    </form>
+  </div>
 
 <!-- Developers Grid Section -->
 <section class="section section--tint" id="developers">
