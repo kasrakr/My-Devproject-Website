@@ -11,26 +11,37 @@ from . utils import searchProfiles
 
 def loginUser(request):
     page = 'login'
+
     if request.user.is_authenticated:
         return redirect('profiles')
 
     if request.method == 'POST':
-        username = request.POST['username']
+        username = request.POST['username'].strip()
         password = request.POST['password']
 
         try:
-            user = User.objects.get(username=username)
-        except:
+            # Case-insensitive username lookup
+            user_obj = User.objects.get(username__iexact=username)
+        except User.DoesNotExist:
             messages.error(request, "Username does not exist!")
+            return render(request, 'users/login_register.html', {
+                'page': page
+            })
 
-        user = authenticate(request, username=username, password=password)
+        # Authenticate using the user's actual username
+        user = authenticate(
+            request,
+            username=user_obj.username,
+            password=password
+        )
 
         if user is not None:
-            login(request,user)
+            login(request, user)
             return redirect('profiles')
         else:
-           messages.error(request,'Username or Password is incorrect!')
-    context = {'page':page}
+            messages.error(request, 'Username or Password is incorrect!')
+
+    context = {'page': page}
     return render(request, 'users/login_register.html', context)
 
 def logoutUser(request):

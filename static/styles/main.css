@@ -5126,3 +5126,59 @@ a.tag-pill:hover {
   color: var(--color-ink-soft);
 }
 .message-detail__actions { margin-top: 2rem; }
+
+/* ==========================================================================
+   34. MESSAGE FORM — SENDING AS NOTE
+   ========================================================================== */
+.message-form__sender-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--color-primary-50);
+  border: 1px solid var(--color-primary-100);
+  border-radius: var(--radius-md);
+}
+.message-form__sender-icon {
+  flex-shrink: 0;
+  color: var(--color-primary-600);
+  margin-top: 0.15rem;
+}
+.message-form__sender-text {
+  font-size: 0.88rem;
+  color: var(--color-ink-soft);
+  line-height: 1.5;
+}
+.message-form__sender-text strong { color: var(--color-ink); }
+.message-form__sender-email {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  margin-top: 0.1rem;
+}
+/* ==========================================================================
+   34. NAVBAR — UNREAD MESSAGE BADGE
+   ========================================================================== */
+.nav__inbox-link { position: relative; }
+.nav__inbox-badge {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-error);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: var(--radius-full);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
+}

@@ -24,6 +24,17 @@
         <form method="POST" class="project-form glass">
           {% csrf_token %}
 
+          {% if request.user.is_authenticated %}
+          <div class="message-form__sender-note">
+            <span class="message-form__sender-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+            </span>
+            <span class="message-form__sender-text">
+              Sending as <strong>{{ request.user.profile.name|default:request.user.profile.username }}</strong>
+              {% if request.user.profile.email %}<span class="message-form__sender-email">{{ request.user.profile.email }}</span>{% endif %}
+            </span>
+          </div>
+          {% else %}
           <div class="form-row">
             <div class="field{% if form.name.errors %} has-error{% endif %}">
               <label for="{{ form.name.id_for_label }}">Your name</label>
@@ -36,6 +47,7 @@
               <span class="field-error">{{ form.email.errors.0 }}</span>
             </div>
           </div>
+          {% endif %}
 
           <div class="field{% if form.subject.errors %} has-error{% endif %}">
             <label for="{{ form.subject.id_for_label }}">Subject</label>

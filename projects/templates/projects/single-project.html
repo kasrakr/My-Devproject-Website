@@ -359,46 +359,4 @@
     </div>
   </div>
 </section>
-
-{% if related_projects %}
-<section class="section section--tint">
-  <div class="section-inner">
-    <div class="section__head">
-      <p class="eyebrow reveal">More to explore</p>
-      <h2 class="section__title reveal">Other projects in the collection.</h2>
-    </div>
-
-    <div class="grid grid--3">
-      {% for related in related_projects %}
-      <a
-        href="{% url 'project' related.id %}"
-        class="preview-card glass reveal"
-      >
-        <div class="preview-card__img-wrap">
-          {% if related.featured_image %}
-          <img
-            src="{{ related.featured_image.url }}"
-            alt="{{ related.title }}"
-            loading="lazy"
-          />
-          {% else %}
-          <img
-            src="https://placehold.co/800x600/EFF6FF/1D4ED8?text={{ related.title|urlencode }}"
-            alt="{{ related.title }}"
-            loading="lazy"
-          />
-          {% endif %}
-        </div>
-        <div class="preview-card__caption">
-          <h3>{{ related.title }}</h3>
-          <p>{{ related.description|truncatewords:14 }}</p>
-        </div>
-      </a>
-      {% endfor %}
-     
-      
-    </div>
-  </div>
-</section>
- {% endif %}
 {% endblock content %}
