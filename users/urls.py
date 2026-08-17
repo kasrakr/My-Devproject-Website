@@ -8,4 +8,7 @@ urlpatterns = [
     path('', views.profiles, name="profiles"),  # if its blank '' it means its become your homepage
     path('profile/<str:pk>/', views.userProfile, name="userProfile"),
     path('account/', views.userAccount, name="account"),
+    path('inbox/', views.inbox, name="inbox"),
+    path('message/<str:pk>/', views.viewMessage, name="message"),
+    path('create-message/<str:pk>/', views.createMessage, name="create-message"),
 ]

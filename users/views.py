@@ -2,9 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import CustomUserCreationForm, ProfileForm, SkillForm
+from .forms import CustomUserCreationForm, ProfileForm, SkillForm, MessageForm
 from django.contrib.auth.models import User
-from .models import profile, Skill
+from .models import profile, Skill, Message
 from . utils import searchProfiles
 # Create your views here.
 
@@ -155,3 +155,29 @@ def userAccount(request):
         'skill_form': skill_form,
     }
     return render(request, 'users/account.html', context)
+
+@login_required(login_url='login')
+def inbox(request):
+    profile = request.user.profile
+    # because we set related name of recipient messages
+    messageRequest = profile.messages.all()
+    unreadCount = messageRequest.filter(is_read=False).count()
+    context = {'messageRequest':messageRequest , 'unreadCount':unreadCount}
+    return render (request, 'users/inbox.html', context)
+
+@login_required(login_url='login')
+def viewMessage(request,pk):
+    profile = request.user.profile
+        # because we set related name of recipient messages
+    message = profile.messages.get(id=pk)
+    if message.is_read == False:
+        message.is_read = True
+        message.save()
+    context = {'message':message}
+    return render (request, 'users/message.html',context)
+
+@login_required(login_url='login')
+def createMessage(request,pk):
+    recipient = profile.objects.get(id=pk)
+    context = {'recipient':recipient}
+    return render (request, 'users/message_form.html', context)
