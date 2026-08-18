@@ -1,7 +1,7 @@
-
 /* ==========================================================================
    0. RESET & BASE
    ========================================================================== */
+html, body { height: 100%; }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
@@ -86,6 +86,9 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   /* Clears the fixed nav on every page. The hero section below cancels
      this out for the home page, since it wants to sit flush behind
      the nav and fill the viewport instead. */
@@ -125,6 +128,7 @@ textarea:focus-visible {
 /* ==========================================================================
    3. LAYOUT UTILITIES
    ========================================================================== */
+#main { flex: 1 0 auto; }
 .section-inner {
   max-width: var(--container-w);
   margin: 0 auto;
@@ -987,105 +991,6 @@ textarea:focus-visible {
 .terminal__body .comment { color: var(--color-muted); }
 @media (max-width: 900px) { .get-started { grid-template-columns: 1fr; gap: 2.25rem; } }
 
-/* ==========================================================================
-   15. CONTACT
-   ========================================================================== */
-.contact {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 3.5rem;
-  align-items: start;
-}
-.contact__info p { margin-top: 1rem; font-size: 1.02rem; }
-.contact__cards { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 2rem; }
-.info-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.2rem;
-  border-radius: var(--radius-md);
-}
-.info-card__icon {
-  width: 40px; height: 40px;
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  background: var(--color-primary-50);
-  color: var(--color-primary-600);
-}
-.info-card__icon svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.info-card__label { font-size: 0.78rem; color: var(--color-muted); }
-.info-card__value { font-weight: 600; font-size: 0.95rem; color: var(--color-ink); }
-
-.social-links { display: flex; gap: 0.75rem; margin-top: 2rem; }
-.social-links a {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--color-ink-soft);
-  transition: transform 0.25s var(--ease), color 0.25s var(--ease), background 0.25s var(--ease);
-}
-.social-links a svg { width: 18px; height: 18px; fill: currentColor; }
-.social-links a:hover { transform: translateY(-3px); color: var(--color-primary-600); background: var(--glass-bg-strong); }
-
-.contact-form { padding: 2rem; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
-.field { margin-bottom: 1.2rem; }
-.field label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: var(--color-ink);
-}
-.field input, .field textarea {
-  width: 100%;
-  padding: 0.85rem 1rem;
-  border-radius: var(--radius-sm);
-  border: 1.5px solid rgba(15, 23, 42, 0.12);
-  background: rgba(255, 255, 255, 0.7);
-  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
-}
-.field input:focus, .field textarea:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
-  outline: none;
-}
-.field textarea { resize: vertical; min-height: 120px; }
-.field.has-error input, .field.has-error textarea { border-color: #EF4444; }
-.field-error {
-  display: block;
-  min-height: 1.1em;
-  font-size: 0.78rem;
-  color: #EF4444;
-  margin-top: 0.35rem;
-}
-.form-status {
-  margin-top: 1rem;
-  padding: 0.9rem 1.1rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.9rem;
-  display: none;
-  align-items: center;
-  gap: 0.6rem;
-}
-.form-status.is-success {
-  display: flex;
-  background: rgba(34, 197, 94, 0.12);
-  color: #15803D;
-  border: 1px solid rgba(34, 197, 94, 0.25);
-}
-.form-status svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
-
-@media (max-width: 900px) {
-  .contact { grid-template-columns: 1fr; gap: 2.5rem; }
-}
-@media (max-width: 560px) {
-  .form-row { grid-template-columns: 1fr; }
-  .contact-form { padding: 1.5rem; }
-}
 
 /* ==========================================================================
    16. FOOTER
@@ -1094,6 +999,7 @@ textarea:focus-visible {
   padding: 2rem 0;
   border-top: 1px solid var(--color-line);
   background: var(--color-bg-tint);
+  flex-shrink: 0;
 }
 .footer__inner {
   display: flex;
@@ -1110,7 +1016,6 @@ textarea:focus-visible {
 .social-links--footer { margin-top: 0; }
 .social-links--footer a { width: 34px; height: 34px; }
 .social-links--footer a svg { width: 15px; height: 15px; }
-
 /* ==========================================================================
    17. BACK TO TOP
    ========================================================================== */
