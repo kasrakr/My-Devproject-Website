@@ -63,15 +63,9 @@ It's my first website, and it's the project that made Django click for me — ev
 
 ## 🖼️ Preview
 
-<!--
-  👉 ADD YOUR SCREENSHOT HERE
-  1) Take a screenshot of your homepage (and any other pages you like).
-  2) Save it into a `docs/` folder in the repo root, e.g. docs/screenshot-home.png
-  3) Replace the placeholder URL below with the local path, e.g. src="docs/screenshot-home.png"
--->
 
 <div align="center">
-  <img src="https://placehold.co/900x500/3B82F6/ffffff?text=%F0%9F%93%B8+Add+a+screenshot+of+DevProject+here" alt="DevProject preview placeholder — replace with a real screenshot" width="850" />
+  <img src="docs/sc-developes.png" alt="DevProject preview" width="850" />
 </div>
 
 <details>
@@ -81,25 +75,24 @@ It's my first website, and it's the project that made Django click for me — ev
 <table>
 <tr>
 <td align="center" width="25%">
-<img src="https://placehold.co/400x260/2563EB/ffffff?text=Project+Details+Page" width="100%" /><br/>
+<img src="docs/sc-project.png" width="100%" /><br/>
 <sub>Project details page</sub>
 </td>
 <td align="center" width="25%">
-<img src="https://placehold.co/400x260/2563EB/ffffff?text=Developer+Profiles" width="100%" /><br/>
-<sub>Developer profiles</sub>
+<img src="docs/sc-profile.png" width="100%" /><br/>
+<sub>Developer profile</sub>
 </td>
 <td align="center" width="25%">
-<img src="https://placehold.co/400x260/2563EB/ffffff?text=Messaging+Inbox" width="100%" /><br/>
+<img src="docs/sc-messages.png" width="100%" /><br/>
 <sub>Messaging inbox</sub>
 </td>
 <td align="center" width="25%">
-<img src="https://placehold.co/400x260/2563EB/ffffff?text=Search+%26+Tag+Filtering" width="100%" /><br/>
-<sub>Search &amp; tag filtering</sub>
+<img src="docs/sc-home.png" width="100%" /><br/>
+<sub>Home</sub>
 </td>
 </tr>
 </table>
 
-*(Swap each placeholder for a real screenshot the same way as above.)*
 
 </details>
 
@@ -218,8 +211,7 @@ Then open **http://127.0.0.1:8000** 🎉
 - [x] Private messaging inbox
 - [ ] Deploy a live demo
 - [ ] REST API
-- [ ] Email notifications for new messages
-- [ ] Automated tests & CI
+- [ ] Email notifications for new registered users
 
 See the [issues page](https://github.com/kasrakr/My-Devproject-Website/issues) for open items — new ideas are welcome.
 
@@ -249,8 +241,7 @@ Distributed under the **MIT License**. See [`LICENSE`](./LICENSE) for details.
   <a href="https://github.com/kasrakr">
     <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
   </a>
-  <!-- Add more badges here, e.g. LinkedIn / email -->
-  <!-- <a href="mailto:you@example.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a> -->
+  <a href="kasrakarimaian84@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a> 
 </div>
 
 Project link: [github.com/kasrakr/My-Devproject-Website](https://github.com/kasrakr/My-Devproject-Website)
@@ -266,7 +257,7 @@ Project link: [github.com/kasrakr/My-Devproject-Website](https://github.com/kasr
 
 <div align="center">
 
-If this project helped you learn something, consider giving it a ⭐ — it means a lot for a first website!
+If you like this project, consider giving it a ⭐ — it means a lot for a first website!
 
 </div>
 
