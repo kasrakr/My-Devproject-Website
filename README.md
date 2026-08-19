@@ -248,11 +248,16 @@ Distributed under the **MIT License**. See [`LICENSE`](./LICENSE) for details.
   <a href="https://github.com/kasrakr">
     <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
   </a>
-  <!-- Add more badges here, e.g. LinkedIn / email -->
-  <!-- <a href="mailto:you@example.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a> -->
+  <a href="https://linkedin.com/in/kasrakarimian" >
+  <img src="https://img.shields.io/badge/LinkedIn-A855F7?style=for-the-badge&logo=linkedin&logoColor=white&labelColor=1E1B4B" alt="LinkedIn" />
+</a>
+<a href="https://t.me/lowkasra">
+  <img src="https://img.shields.io/badge/Telegram-8B5CF6?style=for-the-badge&logo=telegram&logoColor=white&labelColor=1E1B4B" alt="Telegram" />
+</a>
+<a href="mailto:kasrakarimaian84@gmail.com" >
+  <img src="https://img.shields.io/badge/Email-6D28D9?style=for-the-badge&logo=gmail&logoColor=white&labelColor=1E1B4B" alt="Email" />
+</a>
 </div>
-
-
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
