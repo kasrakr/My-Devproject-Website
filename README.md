@@ -1,20 +1,15 @@
 <a id="readme-top"></a>
 
-<!--
-  👉 This banner merges the DevProject logo into the wave graphic itself.
-  It's provided as a separate file: docs/banner.svg
-  Add a `docs/` folder to your repo root and drop banner.svg into it,
-  then this line will render it here.
--->
+
 <img src="docs/banner.svg" alt="DevProject banner" width="100%"/>
 
 <div align="center">
 
 # DevProject
 
-[![Typing SVG](https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=24&duration=3000&pause=900&color=2563EB&center=true&vCenter=true&width=560&lines=A+Django-powered+developer+showcase+%F0%9F%9A%80;Post+projects.+Get+voted.+Get+discovered.+%E2%9C%A8;Built+from+scratch+while+learning+Django+%F0%9F%92%99)](https://github.com/kasrakr/My-Devproject-Website)
+[![Typing SVG](https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=30&duration=3000&pause=900&color=2563EB&center=true&vCenter=true&width=750&height=60&lines=A+Django-powered+developer+showcase+%F0%9F%9A%80;Post+projects.+Get+voted.+%E2%9C%A8;Built+while+learning+Django+%F0%9F%92%99)](https://github.com/kasrakr/My-Devproject-Website)
 
-A full-stack Django platform where developers build a profile, publish their projects with tags &amp; screenshots, get up/down-voted and reviewed by the community, and message each other directly — all wrapped in a hand-built, no-framework front end.
+A full-stack Django platform where developers build a profile, publish their projects with tags &amp; screenshots, get up/down-voted and reviewed by the community, and message each other directly — all wrapped in a no-framework front end.
 
 <p>
   <img src="https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
@@ -57,7 +52,7 @@ A full-stack Django platform where developers build a profile, publish their pro
 - get feedback from other developers through up/down-votes and written reviews,
 - and message each other directly through a private inbox.
 
-It's my first website, and it's the project that made Django click for me — everything from the models to the templates to the vanilla CSS was written by hand.
+It's my first website, and it's the project that made Django click for me — everything from the models to the templates to the vanilla CSS was my first experience in Web Developing.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -65,7 +60,7 @@ It's my first website, and it's the project that made Django click for me — ev
 
 
 <div align="center">
-  <img src="docs/sc-developes.png" alt="DevProject preview" width="850" />
+  <img src="docs/sc-home.png" alt="DevProject preview placeholder — replace with a real screenshot" width="1100" />
 </div>
 
 <details>
@@ -74,23 +69,35 @@ It's my first website, and it's the project that made Django click for me — ev
 
 <table>
 <tr>
-<td align="center" width="25%">
+<td align="center" width="100%">
+<img src="docs/sc-login.png" width="100%" /><br/>
+<sub>Login page</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="100%">
+<img src="docs/sc-developes.png" width="100%" /><br/>
+<sub>Developers</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="100%">
+<img src="docs/sc-profile.png" width="100%" /><br/>
+<sub>Developer profiles</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="100%">
 <img src="docs/sc-project.png" width="100%" /><br/>
 <sub>Project details page</sub>
 </td>
-<td align="center" width="25%">
-<img src="docs/sc-profile.png" width="100%" /><br/>
-<sub>Developer profile</sub>
-</td>
-<td align="center" width="25%">
+</tr>
+
+<td align="center" width="100%">
 <img src="docs/sc-messages.png" width="100%" /><br/>
 <sub>Messaging inbox</sub>
 </td>
-<td align="center" width="25%">
-<img src="docs/sc-home.png" width="100%" /><br/>
-<sub>Home</sub>
-</td>
-</tr>
+
 </table>
 
 
@@ -209,9 +216,9 @@ Then open **http://127.0.0.1:8000** 🎉
 - [x] Live search & tag filtering
 - [x] Voting & review system
 - [x] Private messaging inbox
-- [ ] Deploy a live demo
+- [ ] Email notifications for new users
 - [ ] REST API
-- [ ] Email notifications for new registered users
+- [ ] Deploy a live demo
 
 See the [issues page](https://github.com/kasrakr/My-Devproject-Website/issues) for open items — new ideas are welcome.
 
@@ -241,10 +248,11 @@ Distributed under the **MIT License**. See [`LICENSE`](./LICENSE) for details.
   <a href="https://github.com/kasrakr">
     <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
   </a>
-  <a href="kasrakarimaian84@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a> 
+  <!-- Add more badges here, e.g. LinkedIn / email -->
+  <!-- <a href="mailto:you@example.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a> -->
 </div>
 
-Project link: [github.com/kasrakr/My-Devproject-Website](https://github.com/kasrakr/My-Devproject-Website)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -257,8 +265,8 @@ Project link: [github.com/kasrakr/My-Devproject-Website](https://github.com/kasr
 
 <div align="center">
 
-If you like this project, consider giving it a ⭐ — it means a lot for a first website!
+If this project helped you learn something, consider giving it a ⭐ — it means a lot for me!
 
 </div>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&height=120&color=0:60A5FA,100:1D4ED8&section=footer&animation=fadeIn" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&height=160&color=0:60A5FA,100:1D4ED8&section=footer&animation=fadeIn" width="100%"/>
