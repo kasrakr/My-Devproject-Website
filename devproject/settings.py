@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'projects.apps.ProjectsConfig',# my added app
     'users.apps.UsersConfig', # added users app
+    'rest_framework', # django restframework installation
 ]
 
 MIDDLEWARE = [
